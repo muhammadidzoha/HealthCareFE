@@ -5,7 +5,7 @@ import { useSidebar } from "@/components/ui/sidebar";
 import DynamicBreadcrumb from "./Homepage/DynamicBreadcrumb";
 import { NavUser } from "./nav-user";
 
-export function SiteHeader({ data }) {
+export function SiteHeader({ onClick, data }) {
   const { toggleSidebar } = useSidebar();
 
   return (
@@ -21,7 +21,7 @@ export function SiteHeader({ data }) {
         </Button>
         <Separator orientation="vertical" className="mr-2 h-4" />
         <DynamicBreadcrumb />
-        <NavUser user={data.user} />
+        <NavUser onClick={onClick} user={data.user} />
       </div>
     </header>
   );

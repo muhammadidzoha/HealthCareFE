@@ -8,6 +8,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 
 export function AppSidebar({ data, ...props }) {
@@ -19,7 +20,7 @@ export function AppSidebar({ data, ...props }) {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
+            <SidebarMenuButton variant={"blue"} size="lg" asChild>
               <a href="/">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-white border border-white text-sidebar-primary-foreground">
                   <img src="/logo.png" className="size-4" alt="logo" />
@@ -37,7 +38,7 @@ export function AppSidebar({ data, ...props }) {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="bg-[#83adff]">
         <NavMain items={data.navMain} />
       </SidebarContent>
     </Sidebar>

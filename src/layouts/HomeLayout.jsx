@@ -8,17 +8,31 @@ import {
   LayoutDashboard,
   LockKeyhole,
 } from "lucide-react";
-import { Outlet, useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 export default function HomeLayout() {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  // useEffect(() => {
+  //   if (!localStorage.getItem("accessToken") || !localStorage.getItem("user")) {
+  //     navigate("/");
+  //   }
+  // }, [navigate]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("accessToken");
+    window.location.reload();
+  };
 
   const data = {
     user: {
       username: JSON.parse(localStorage.getItem("user"))?.username,
       email: JSON.parse(localStorage.getItem("user"))?.email,
       avatar: "https://docs.material-tailwind.com/img/face-2.jpg",
-      // onClick: handleLogout,
+      onClick: handleLogout,
     },
     teams: [
       {
@@ -38,7 +52,7 @@ export default function HomeLayout() {
         title: "Kategori",
         url: "/dashboard/kategori",
         icon: ChartBarStacked,
-        isActive: location.pathname === "/dashboard/kategori",
+        isActive: location.pathname.startsWith("/dashboard/kategori"),
       },
       {
         title: "Pertanyaan",
@@ -50,11 +64,13 @@ export default function HomeLayout() {
         title: "Admin",
         url: "/dashboard/admin",
         icon: LockKeyhole,
+        isActive: location.pathname.startsWith("/dashboard/admin"),
       },
       {
         title: "Instansi",
         url: "/dashboard/instansi",
         icon: Building,
+        isActive: location.pathname.startsWith("/dashboard/instansi"),
       },
     ],
   };
@@ -62,7 +78,7 @@ export default function HomeLayout() {
   return (
     <div className="[--header-height:calc(theme(spacing.14))]">
       <SidebarProvider className="flex flex-col">
-        <SiteHeader data={data} />
+        <SiteHeader onClick={data.user.onClick} data={data} />
         <div className="flex flex-1">
           <AppSidebar data={data} />
           <SidebarInset>
