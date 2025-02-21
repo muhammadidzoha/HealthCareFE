@@ -4,16 +4,17 @@ import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import AuthLayout from "./layouts/AuthLayout";
 import SignIn from "./pages/Auth/SignIn";
-import HomeLayout from "./layouts/HomeLayout";
-import HomeParentLayout from "./layouts/HomeParentLayout";
-import HomeInstitutionLayout from "./layouts/HomeInstitutionLayout";
-import Home from "./pages/Homepage/Home/Home";
+import Home from "./pages/Dashboard/Admin/Home";
 import SignUp from "./pages/Auth/SignUp";
-import HomeParent from "./pages/Homepage/Parent/HomeParent";
-import Category from "./pages/Homepage/Home/Category";
-import Question from "./pages/Homepage/Home/Question";
-import Admin from "./pages/Homepage/Home/Admin";
-import Institution from "./pages/Homepage/Home/Institution";
+import HomeParent from "./pages/Dashboard/Parent/HomeParent";
+import Category from "./pages/Dashboard/Admin/Category";
+import Question from "./pages/Dashboard/Admin/Question";
+import Admin from "./pages/Dashboard/Admin/Admin";
+import Institution from "./pages/Dashboard/Admin/Institution";
+import AdminLayout from "./layouts/AdminLayout";
+import ParentLayout from "./layouts/ParentLayout";
+import InstitutionLayout from "./layouts/InstitutionLayout";
+import HealthCareLayout from "./layouts/HealthCareLayout";
 
 function App() {
   const location = useLocation();
@@ -29,20 +30,16 @@ function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/landing-page" replace />} />
           <Route path="/landing-page" element={<LandingPageLayout />} />
-          <Route path="/dashboard" element={<HomeLayout />}>
+          <Route path="/dashboard" element={<AdminLayout />}>
             <Route index element={<Home />} />
             <Route path="kategori" element={<Category />} />
             <Route path="pertanyaan" element={<Question />} />
             <Route path="admin" element={<Admin />} />
             <Route path="instansi" element={<Institution />} />
+            <Route path="parent" element={<ParentLayout />}></Route>
+            <Route path="institution" element={<InstitutionLayout />}></Route>
+            <Route path="health-care" element={<HealthCareLayout />}></Route>
           </Route>
-          <Route path="/dashboard/parent" element={<HomeParentLayout />}>
-            <Route index element={<HomeParent />} />
-          </Route>
-          <Route
-            path="/dashboard/institution"
-            element={<HomeInstitutionLayout />}
-          ></Route>
           <Route path="/auth" element={<AuthLayout />}>
             <Route path="login" element={<SignIn />} />
             <Route path="register" element={<SignUp />} />

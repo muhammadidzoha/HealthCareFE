@@ -2,7 +2,7 @@ import { SidebarIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useSidebar } from "@/components/ui/sidebar";
-import DynamicBreadcrumb from "./Homepage/DynamicBreadcrumb";
+import DynamicBreadcrumb from "./Dashboard/DynamicBreadcrumb";
 import { NavUser } from "./nav-user";
 
 export function SiteHeader({ onClick, data }) {
@@ -19,7 +19,7 @@ export function SiteHeader({ onClick, data }) {
         >
           <SidebarIcon />
         </Button>
-        <Separator orientation="vertical" className="mr-2 h-4" />
+        <Separator orientation="vertical" className="mr-2 h-4 !bg-gray-300" />
         <DynamicBreadcrumb />
         <NavUser onClick={onClick} user={data.user} />
       </div>

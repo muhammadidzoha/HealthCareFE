@@ -45,7 +45,10 @@ const InputSignIn = () => {
                 if (userRole === "admin") {
                   navigate("/dashboard");
                 } else if (userRole === "parent") {
-                  localStorage.setItem("updateProfile", true);
+                  navigate("/dashboard/parent");
+                } else if (userRole === "institution") {
+                  navigate("/dashboard/parent");
+                } else if (userRole === "healthcare") {
                   navigate("/dashboard/parent");
                 } else {
                   navigate("/landing-page");

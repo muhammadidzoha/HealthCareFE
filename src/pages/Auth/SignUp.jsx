@@ -21,11 +21,19 @@ const SignUp = () => {
   return (
     <div className="w-max overflow-hidden">
       <Tabs id="custom-animation" value={initialTab}>
-        <TabsHeader>
+        <TabsHeader
+          className="bg-[#f6f6f6] transition-all"
+          indicatorProps={{
+            className: "bg-[#83adff] shadow-none",
+          }}
+        >
           <Tab
             onClick={() => {
               navigate(`.?parent`);
             }}
+            className={`${
+              initialTab === "parent" ? "text-white" : "text-gray-900"
+            }`}
             key="parent"
             value="parent"
           >
@@ -35,6 +43,9 @@ const SignUp = () => {
             onClick={() => {
               navigate(`.?institution`);
             }}
+            className={`${
+              initialTab === "institution" ? "text-white" : "text-gray-900"
+            }`}
             key="institution"
             value="institution"
           >
