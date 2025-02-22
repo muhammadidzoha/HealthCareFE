@@ -15,6 +15,8 @@ import AdminLayout from "./layouts/AdminLayout";
 import ParentLayout from "./layouts/ParentLayout";
 import InstitutionLayout from "./layouts/InstitutionLayout";
 import HealthCareLayout from "./layouts/HealthCareLayout";
+import HomeInstitution from "./pages/Dashboard/Institution/HomeInstitution";
+import HomeHealthCare from "./pages/Dashboard/HealthCare/HomeHealthCare";
 
 function App() {
   const location = useLocation();
@@ -36,10 +38,20 @@ function App() {
             <Route path="pertanyaan" element={<Question />} />
             <Route path="admin" element={<Admin />} />
             <Route path="instansi" element={<Institution />} />
-            <Route path="parent" element={<ParentLayout />}></Route>
-            <Route path="institution" element={<InstitutionLayout />}></Route>
-            <Route path="health-care" element={<HealthCareLayout />}></Route>
           </Route>
+
+          <Route path="/dashboard/institution" element={<InstitutionLayout />}>
+            <Route index element={<HomeInstitution />} />
+          </Route>
+
+          <Route path="/dashboard/parent" element={<ParentLayout />}>
+            <Route index element={<HomeParent />} />
+          </Route>
+
+          <Route path="/dashboard/health-care" element={<HealthCareLayout />}>
+            <Route index element={<HomeHealthCare />} />
+          </Route>
+
           <Route path="/auth" element={<AuthLayout />}>
             <Route path="login" element={<SignIn />} />
             <Route path="register" element={<SignUp />} />

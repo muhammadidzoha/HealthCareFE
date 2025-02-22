@@ -9,7 +9,7 @@ import {
 } from "@material-tailwind/react";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
-import { registerInstitution } from "@/lib/api";
+import { registerInstitution } from "@/lib/API/Auth/authAPI";
 import { useNavigate } from "react-router-dom";
 
 const InputSignUpInstitution = () => {

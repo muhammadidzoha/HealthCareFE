@@ -6,7 +6,6 @@ const api = axios.create({
   baseURL: BASE_URL,
 });
 
-// Fungsi untuk login
 export const login = async (credentials) => {
   try {
     const response = await api.post(
@@ -19,7 +18,6 @@ export const login = async (credentials) => {
   }
 };
 
-// Fungsi untuk register parent
 export const registerParent = async (userData) => {
   try {
     const response = await api.post(
@@ -32,7 +30,6 @@ export const registerParent = async (userData) => {
   }
 };
 
-// Fungsi untuk register institution
 export const registerInstitution = async (userData) => {
   try {
     const response = await api.post(

@@ -9,7 +9,7 @@ import {
   TabsHeader,
 } from "@material-tailwind/react";
 import { ArrowLeft } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 const SignUp = () => {
@@ -32,7 +32,9 @@ const SignUp = () => {
               navigate(`.?parent`);
             }}
             className={`${
-              initialTab === "parent" ? "text-white" : "text-gray-900"
+              initialTab === "parent"
+                ? "text-white font-bold"
+                : "text-gray-900 font-semibold"
             }`}
             key="parent"
             value="parent"
@@ -44,7 +46,9 @@ const SignUp = () => {
               navigate(`.?institution`);
             }}
             className={`${
-              initialTab === "institution" ? "text-white" : "text-gray-900"
+              initialTab === "institution"
+                ? "text-white font-bold"
+                : "text-gray-900 font-semibold"
             }`}
             key="institution"
             value="institution"

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { Button, Input } from "@material-tailwind/react";
 import { useFormik } from "formik";
-import { registerParent } from "@/lib/api";
+import { registerParent } from "@/lib/API/Auth/authAPI";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 

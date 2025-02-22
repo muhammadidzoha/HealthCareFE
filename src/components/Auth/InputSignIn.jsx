@@ -3,7 +3,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { Button, Input } from "@material-tailwind/react";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
-import { decodeJwt, login } from "@/lib/api";
+import { decodeJwt, login } from "@/lib/API/Auth/authAPI";
 import { useNavigate } from "react-router-dom";
 
 const InputSignIn = () => {
@@ -49,7 +49,7 @@ const InputSignIn = () => {
                 } else if (userRole === "institution") {
                   navigate("/dashboard/parent");
                 } else if (userRole === "healthcare") {
-                  navigate("/dashboard/parent");
+                  navigate("/dashboard/health-care");
                 } else {
                   navigate("/landing-page");
                 }
