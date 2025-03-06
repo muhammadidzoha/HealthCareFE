@@ -1,10 +1,4 @@
-import axios from "axios";
-
-const BASE_URL = import.meta.env.VITE_BASE_URL;
-
-const api = axios.create({
-  baseURL: BASE_URL,
-});
+import api from "../api";
 
 export const login = async (credentials) => {
   try {
@@ -55,5 +49,3 @@ export const decodeJwt = async () => {
   );
   return response.data.data;
 };
-
-export default api;

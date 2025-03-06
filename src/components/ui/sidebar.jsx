@@ -315,7 +315,7 @@ const SidebarHeader = React.forwardRef(({ className, ...props }, ref) => {
     <div
       ref={ref}
       data-sidebar="header"
-      className={cn("flex bg-[#83adff] flex-col gap-2 p-2", className)}
+      className={cn("flex flex-col gap-2 p-2", className)}
       {...props}
     />
   );
@@ -454,7 +454,7 @@ const sidebarMenuButtonVariants = cva(
         default: "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
         outline:
           "bg-background shadow-[0_0_0_1px_hsl(var(--sidebar-border))] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[0_0_0_1px_hsl(var(--sidebar-accent))]",
-        blue: "hover:bg-[#9bbcff] hover:text-white active:bg-[#9bbcff] active:text-[#83adff] active:font-medium data-[active=true]:text-[#83adff] data-[active=false]:text-white",
+        blue: "hover:bg-[#3493f0] hover:text-white active:bg-[#176dbd] active:text-[#1b82e6] active:font-medium data-[active=true]:text-[#3493f0] data-[active=false]:text-white",
       },
       size: {
         default: "h-8 text-sm",

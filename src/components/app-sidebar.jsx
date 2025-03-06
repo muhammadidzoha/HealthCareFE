@@ -17,11 +17,11 @@ export function AppSidebar({ data, ...props }) {
       className="top-[--header-height] !h-[calc(100svh-var(--header-height))]"
       {...props}
     >
-      <SidebarHeader>
+      <SidebarHeader className="bg-[#1b82e6]">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton variant={"blue"} size="lg" asChild>
-              <a href="/">
+              <a href="/dashboard">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-white border border-white text-sidebar-primary-foreground">
                   <img src="/logo.png" className="size-4" alt="logo" />
                 </div>
@@ -38,7 +38,7 @@ export function AppSidebar({ data, ...props }) {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent className="bg-[#83adff]">
+      <SidebarContent className="bg-[#1b82e6]">
         <NavMain items={data.navMain} />
       </SidebarContent>
     </Sidebar>

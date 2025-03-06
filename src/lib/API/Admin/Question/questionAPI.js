@@ -1,8 +1,8 @@
 import api from "../../api";
 
-export const getAllCategory = async (accessToken) => {
+export const getAllQuestion = async (accessToken) => {
   try {
-    const response = await api.get(import.meta.env.VITE_API_GET_CATEGORY, {
+    const response = await api.get(import.meta.env.VITE_API_GET_QUESTION, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },

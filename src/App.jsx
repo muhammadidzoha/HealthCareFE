@@ -17,6 +17,13 @@ import InstitutionLayout from "./layouts/InstitutionLayout";
 import HealthCareLayout from "./layouts/HealthCareLayout";
 import HomeInstitution from "./pages/Dashboard/Institution/HomeInstitution";
 import HomeHealthCare from "./pages/Dashboard/HealthCare/HomeHealthCare";
+import KnowledgeLayout from "./components/Dashboard/Admin/Question/KnowledgeLayout";
+import LevelLayout from "./components/Dashboard/Admin/Question/LevelLayout";
+import EducationLayout from "./components/Dashboard/Admin/Question/EducationLayout";
+import HabitsLayout from "./components/Dashboard/Admin/Question/HabitsLayout";
+import ServicesLayout from "./components/Dashboard/Admin/Question/ServicesLayout";
+import DevelopmentLayout from "./components/Dashboard/Admin/Question/DevelopmentLayout";
+import ManagementLayout from "./components/Dashboard/Admin/Question/ManagementLayout";
 
 function App() {
   const location = useLocation();
@@ -35,7 +42,15 @@ function App() {
           <Route path="/dashboard" element={<AdminLayout />}>
             <Route index element={<Home />} />
             <Route path="kategori" element={<Category />} />
-            <Route path="pertanyaan" element={<Question />} />
+            <Route path="pertanyaan" element={<Question />}>
+              <Route index element={<KnowledgeLayout />} />
+              <Route path="level" element={<LevelLayout />} />
+              <Route path="education" element={<EducationLayout />} />
+              <Route path="habit" element={<HabitsLayout />} />
+              <Route path="service" element={<ServicesLayout />} />
+              <Route path="development" element={<DevelopmentLayout />} />
+              <Route path="management" element={<ManagementLayout />} />
+            </Route>
             <Route path="admin" element={<Admin />} />
             <Route path="instansi" element={<Institution />} />
           </Route>

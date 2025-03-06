@@ -31,8 +31,6 @@ const chartConfig = {
 const Grid1 = () => {
   const { open } = useSidebar();
 
-  console.log(open);
-
   const months = [
     "Januari",
     "Februari",

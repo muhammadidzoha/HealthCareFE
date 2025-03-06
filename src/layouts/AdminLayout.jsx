@@ -15,11 +15,11 @@ export default function AdminLayout() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!localStorage.getItem("accessToken") || !localStorage.getItem("user")) {
-      navigate("/");
-    }
-  }, [navigate]);
+  // useEffect(() => {
+  //   if (!localStorage.getItem("accessToken") || !localStorage.getItem("user")) {
+  //     navigate("/");
+  //   }
+  // }, [navigate]);
 
   const handleLogout = () => {
     localStorage.removeItem("user");

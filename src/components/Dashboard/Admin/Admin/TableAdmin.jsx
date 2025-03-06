@@ -1,21 +1,21 @@
-import { getAllCategory } from "@/lib/API/Admin/Category/categoryAPI";
+import { getAllUsers } from "@/lib/API/Admin/Admin/adminAPI";
 import { Card, Typography } from "@material-tailwind/react";
 import useSWR from "swr";
 
-const TABLE_HEAD = ["No", "Kategori"];
+const TABLE_HEAD = ["No", "Email", "Role", "Action"];
 
-export function TableCategory() {
-  const category = async () => {
-    const response = await getAllCategory(localStorage.getItem("accessToken"));
+export function TableAdmin() {
+  const admin = async () => {
+    const response = await getAllUsers(localStorage.getItem("accessToken"));
     return response.data;
   };
 
-  const { data, error, isLoading } = useSWR("categories", category);
+  const { data, error, isLoading } = useSWR("admin", admin);
 
   let tableContent;
 
   if (isLoading) {
-    tableContent = [...Array(7)].map((_, index) => (
+    tableContent = [...Array(10)].map((_, index) => (
       <tr key={index}>
         <td className="p-4">
           <div className="h-[30px] w-full bg-gray-100 animate-pulse rounded"></div>
@@ -26,7 +26,7 @@ export function TableCategory() {
       </tr>
     ));
   } else if (data && data.length > 0) {
-    tableContent = data.map((category, index) => (
+    tableContent = data.map((admin, index) => (
       <tr key={index} className="even:bg-[#f5f8ff]">
         <td className="p-4">
           <Typography variant="small" className="!font-medium !text-black">
@@ -35,7 +35,17 @@ export function TableCategory() {
         </td>
         <td className="p-4">
           <Typography variant="small" className="!font-medium !text-black">
-            {category}
+            {admin.email}
+          </Typography>
+        </td>
+        <td className="p-4">
+          <Typography variant="small" className="!font-medium !text-black">
+            {admin.role?.name}
+          </Typography>
+        </td>
+        <td className="p-4">
+          <Typography variant="small" className="!font-medium !text-black">
+            Edit
           </Typography>
         </td>
       </tr>

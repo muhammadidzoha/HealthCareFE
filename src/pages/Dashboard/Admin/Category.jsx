@@ -1,10 +1,5 @@
 import { TableCategory } from "@/components/Dashboard/Admin/Category/TableCategory";
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  Typography,
-} from "@material-tailwind/react";
+import { Card, CardBody, Typography } from "@material-tailwind/react";
 import React from "react";
 
 const Category = () => {
