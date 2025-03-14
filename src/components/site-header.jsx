@@ -12,14 +12,14 @@ export function SiteHeader({ onClick, data }) {
     <header className="flex sticky top-0 z-50 w-full items-center bg-background shadow-md">
       <div className="flex h-[--header-height] w-full items-center gap-2 px-4">
         <Button
-          className="h-8 w-8"
+          className="h-8 w-8 hidden"
           variant="ghost"
           size="icon"
           onClick={toggleSidebar}
         >
           <SidebarIcon />
         </Button>
-        <Separator orientation="vertical" className="mr-2 h-4 !bg-gray-300" />
+        {/* <Separator orientation="vertical" className="mr-2 h-4 !bg-gray-300" /> */}
         <DynamicBreadcrumb />
         <NavUser onClick={onClick} user={data.user} />
       </div>

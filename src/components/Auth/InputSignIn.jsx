@@ -31,12 +31,9 @@ const InputSignIn = () => {
             return message;
           },
           onClose: async () => {
-            // console.log("onClose response:", responseData);
             if (responseData && responseData.accessToken) {
               try {
                 const decodedUser = await decodeJwt(responseData.accessToken);
-
-                // console.log('Decoded User: ', decodedUser);
 
                 localStorage.setItem("user", JSON.stringify(decodedUser));
 
@@ -46,8 +43,8 @@ const InputSignIn = () => {
                   navigate("/dashboard");
                 } else if (userRole === "parent") {
                   navigate("/dashboard/parent");
-                } else if (userRole === "institution") {
-                  navigate("/dashboard/parent");
+                } else if (userRole === "school" || userRole === 'teacher') {
+                  navigate("/dashboard/school");
                 } else if (userRole === "healthcare") {
                   navigate("/dashboard/health-care");
                 } else {

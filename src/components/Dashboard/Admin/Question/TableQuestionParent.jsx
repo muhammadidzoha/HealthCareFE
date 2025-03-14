@@ -1,24 +1,32 @@
 import { useState } from "react";
 import { getAllQuestion } from "@/lib/API/Admin/Question/questionAPI";
-import { Card, Typography, Button } from "@material-tailwind/react";
+import {
+  Card,
+  Typography,
+  Button,
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+} from "@material-tailwind/react";
 import useSWR from "swr";
 
-const TABLE_HEAD = ["No", "Pertanyaan", "Tipe"];
+const TABLE_HEAD = ["No", "Pertanyaan", "Tipe", "Aksi"];
 const ITEMS_PER_PAGE = 10; // Menampilkan 10 data per halaman
 
 export function TableQuestionParent({ title }) {
   const [currentPage, setCurrentPage] = useState(1);
-
+  const [open, setOpen] = useState(false);
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
   const question = async () => {
     const response = await getAllQuestion(localStorage.getItem("accessToken"));
     return response.data.quisioners.find((q) => q.title === title);
   };
 
+  console.log(selectedQuestion);
+
   const { data, error, isLoading } = useSWR(["questions", title], question);
 
-  console.log(data);
-
-  // Hitung indeks data yang akan ditampilkan berdasarkan halaman aktif
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
   const displayedQuestions = data?.questions?.slice(startIndex, endIndex) || [];
@@ -54,6 +62,17 @@ export function TableQuestionParent({ title }) {
             {q.type}
           </Typography>
         </td>
+        <td className="p-4">
+          <Button
+            onClick={() => {
+              setSelectedQuestion(q);
+              setOpen(!open);
+            }}
+            className="!bg-[#1b82e6]"
+          >
+            Edit
+          </Button>
+        </td>
       </tr>
     ));
   } else {
@@ -68,11 +87,32 @@ export function TableQuestionParent({ title }) {
     );
   }
 
-  // Pagination Controls
   const totalPages = Math.ceil((data?.questions?.length || 0) / ITEMS_PER_PAGE);
 
   return (
     <Card className="h-full w-full overflow-scroll !shadow-none">
+      <Dialog open={open} handler={() => setOpen(!open)}>
+        <DialogHeader>Edit Pertanyaan</DialogHeader>
+        <DialogBody>
+          {selectedQuestion ? (
+            <div>
+              <Typography variant="small" className="!font-medium !text-black">
+                {selectedQuestion.question}
+              </Typography>
+              <Typography variant="small" className="!font-medium !text-black">
+                {selectedQuestion.type}
+              </Typography>
+            </div>
+          ) : (
+            <Typography variant="small" className="!text-gray-500">
+              Memuat pertanyaan...
+            </Typography> // Fallback agar `DialogBody` tidak kosong
+          )}
+        </DialogBody>
+        <DialogFooter>
+          <Button>Save</Button>
+        </DialogFooter>
+      </Dialog>
       <div>
         <h1>test</h1>
       </div>
