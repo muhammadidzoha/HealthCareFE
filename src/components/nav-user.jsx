@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  BadgeCheck,
-  Bell,
-  ChevronsUpDown,
-  CreditCard,
-  LogOut,
-  Sparkles,
-} from "lucide-react";
+import { ChevronsUpDown, LogOut, CircleUser } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -22,9 +15,11 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { useNavigate } from "react-router-dom";
 
 export function NavUser({ onClick, user }) {
   const { isMobile } = useSidebar();
+  const navigate = useNavigate();
 
   return (
     <SidebarMenu className="w-full md:w-min md:absolute md:right-4">
@@ -52,6 +47,13 @@ export function NavUser({ onClick, user }) {
             align="end"
             sideOffset={4}
           >
+            <DropdownMenuItem
+              onClick={() => navigate("profile")}
+              className="cursor-pointer"
+            >
+              <CircleUser />
+              Profile
+            </DropdownMenuItem>
             <DropdownMenuItem onClick={onClick} className="cursor-pointer">
               <LogOut />
               Log out

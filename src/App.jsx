@@ -6,7 +6,8 @@ import AuthLayout from "./layouts/AuthLayout";
 import SignIn from "./pages/Auth/SignIn";
 import Home from "./pages/Dashboard/Admin/Home";
 import SignUp from "./pages/Auth/SignUp";
-import HomeParent from "./pages/Dashboard/Parent/HomeParent";
+// import HomeParent from "./pages/Dashboard/Parent/HomeParent";
+import { ParentHomePage as HomeParent } from "./pages/Dashboard/Parent/HomeParent";
 import Category from "./pages/Dashboard/Admin/Category";
 import Question from "./pages/Dashboard/Admin/Question";
 import Admin from "./pages/Dashboard/Admin/Admin";
@@ -24,6 +25,8 @@ import HabitsLayout from "./components/Dashboard/Admin/Question/HabitsLayout";
 import ServicesLayout from "./components/Dashboard/Admin/Question/ServicesLayout";
 import DevelopmentLayout from "./components/Dashboard/Admin/Question/DevelopmentLayout";
 import ManagementLayout from "./components/Dashboard/Admin/Question/ManagementLayout";
+import { SelfProfilePage } from "./pages/Dashboard/Parent/SelfProfilePage";
+import { AddProfilePage } from "./pages/Dashboard/Parent/AddProfilePage";
 
 function App() {
   const location = useLocation();
@@ -61,6 +64,8 @@ function App() {
 
           <Route path="/dashboard/parent" element={<ParentLayout />}>
             <Route index element={<HomeParent />} />
+            <Route path="profile" element={<SelfProfilePage />} />
+            <Route path="profile/create" element={<AddProfilePage />} />
           </Route>
 
           <Route path="/dashboard/health-care" element={<HealthCareLayout />}>
