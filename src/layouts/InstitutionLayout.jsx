@@ -38,9 +38,9 @@ export default function InstitutionLayout() {
     navMain: [
       {
         title: "Dashboard",
-        url: "/dashboard/institution",
+        url: "/dashboard/school",
         icon: LayoutDashboard,
-        isActive: location.pathname === "/dashboard/institution",
+        isActive: location.pathname === "/dashboard/school",
       },
     ],
   };

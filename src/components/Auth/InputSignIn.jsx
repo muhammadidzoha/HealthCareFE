@@ -43,7 +43,7 @@ const InputSignIn = () => {
                   navigate("/dashboard");
                 } else if (userRole === "parent") {
                   navigate("/dashboard/parent");
-                } else if (userRole === "school" || userRole === 'teacher') {
+                } else if (userRole === "school" || userRole === "teacher") {
                   navigate("/dashboard/school");
                 } else if (userRole === "healthcare") {
                   navigate("/dashboard/health-care");

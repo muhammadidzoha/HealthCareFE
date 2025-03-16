@@ -40,7 +40,7 @@ const Question = () => {
         to={`${category.url}`}
         end={category.url === ""}
         className={({ isActive }) =>
-          `relative text-[#1b82e6] font-semibold
+          `relative text-[#1b82e6] font-medium text-sm
           after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2 after:-bottom-3 after:w-1/2 after:h-[3px] after:bg-[#1b82e6] 
           after:origin-left after:scale-x-0 after:transition-transform after:duration-300 
           ${isActive ? "after:scale-x-100" : "text-[#9e9e9e]"}`

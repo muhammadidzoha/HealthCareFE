@@ -55,7 +55,7 @@ function App() {
             <Route path="instansi" element={<Institution />} />
           </Route>
 
-          <Route path="/dashboard/institution" element={<InstitutionLayout />}>
+          <Route path="/dashboard/school" element={<InstitutionLayout />}>
             <Route index element={<HomeInstitution />} />
           </Route>
 

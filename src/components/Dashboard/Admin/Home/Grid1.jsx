@@ -74,7 +74,10 @@ const Grid1 = () => {
   return (
     <div className="flex space-x-5">
       <div className="bg-white w-full h-[500px] rounded-xl p-10">
-        <ChartContainer config={chartConfig}>
+        <ChartContainer
+          className="mx-auto aspect-square max-h-[250px] min-w-full min-h-full"
+          config={chartConfig}
+        >
           <LineChart
             accessibilityLayer
             data={chartData}
@@ -84,12 +87,17 @@ const Grid1 = () => {
             }}
           >
             <CartesianGrid vertical={false} />
-            <YAxis tickLine={false} axisLine={false} tickMargin={8} />
+            <YAxis
+              width={20}
+              tickLine={false}
+              axisLine={false}
+              tickMargin={0}
+            />
             <XAxis
               dataKey="month"
               tickLine={false}
               axisLine={false}
-              tickMargin={8}
+              tickMargin={10}
               tickFormatter={(value) => value.slice(0, 3)}
             />
             <ChartTooltip
