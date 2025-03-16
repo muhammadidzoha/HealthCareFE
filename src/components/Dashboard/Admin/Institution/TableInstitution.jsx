@@ -1,4 +1,7 @@
-import { deleteUser, getAllUsers } from "@/lib/API/Admin/Admin/adminAPI";
+import {
+  deleteInstitution,
+  getAllInstitution,
+} from "@/lib/API/Admin/Institution/institutionAPI";
 import {
   Card,
   Dialog,
@@ -7,24 +10,36 @@ import {
   IconButton,
   Typography,
 } from "@material-tailwind/react";
-import { Settings2, Trash2 } from "lucide-react";
 import { useState } from "react";
-import { toast } from "react-toastify";
 import useSWR from "swr";
-import FormEditAdmin from "./FormEditAdmin";
+import FormEditInstitution from "./FormEditInstitution";
+import { Settings2, Trash2 } from "lucide-react";
+import { toast } from "react-toastify";
 
-const TABLE_HEAD = ["No", "Nama", "Instansi", "Email", "No Telepon", "Aksi"];
+const TABLE_HEAD = [
+  "No",
+  "Nama",
+  "Alamat",
+  "Provinsi",
+  "Kota/Kabupaten",
+  "Aksi",
+];
 
-export function TableAdmin() {
+export function TableInstituion() {
   const [open, setOpen] = useState(false);
   const [selectedEdit, setSelectedEdit] = useState(null);
 
-  const admin = async () => {
-    const response = await getAllUsers(localStorage.getItem("accessToken"));
+  const institution = async () => {
+    const response = await getAllInstitution(
+      localStorage.getItem("accessToken")
+    );
     return response.data;
   };
 
-  const { data, error, isLoading, mutate } = useSWR("admin", admin);
+  const { data, error, isLoading, mutate } = useSWR(
+    "institutions",
+    institution
+  );
 
   const handleDelete = async (id) => {
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -33,7 +48,7 @@ export function TableAdmin() {
 
     toast.promise(
       handleLoading.then(() =>
-        deleteUser(localStorage.getItem("accessToken"), id)
+        deleteInstitution(localStorage.getItem("accessToken"), id)
       ),
       {
         pending: "Loading...",
@@ -41,11 +56,23 @@ export function TableAdmin() {
           render(response) {
             return response.data.message;
           },
-          onClose: () => mutate(null, { revalidate: true }),
+          onClose: () => mutate(),
         },
+        error: {
+          render(response) {
+            return response.data.message;
+          },
+        },
+      },
+      {
+        pauseOnFocusLoss: false,
+        pauseOnHover: false,
+        autoClose: 2000,
       }
     );
   };
+
+  console.log(data);
 
   let tableContent;
 
@@ -61,7 +88,7 @@ export function TableAdmin() {
       </tr>
     ));
   } else if (data && data.length > 0) {
-    tableContent = data.map((admin, index) => (
+    tableContent = data.map((i, index) => (
       <tr key={index} className="even:bg-[#f5f8ff]">
         <td className="p-4">
           <Typography variant="small" className="!font-medium !text-black">
@@ -73,22 +100,25 @@ export function TableAdmin() {
             variant="small"
             className="!font-medium !text-black !capitalize"
           >
-            {admin.username}
+            {i.name}
+          </Typography>
+        </td>
+        <td className="p-4">
+          <Typography
+            variant="small"
+            className="!font-medium !text-black !capitalize"
+          >
+            {i.address}
           </Typography>
         </td>
         <td className="p-4">
           <Typography variant="small" className="!font-medium !text-black">
-            {admin.institution?.name ?? "Admin"}
+            {i.province?.name}
           </Typography>
         </td>
         <td className="p-4">
           <Typography variant="small" className="!font-medium !text-black">
-            {admin.email}
-          </Typography>
-        </td>
-        <td className="p-4">
-          <Typography variant="small" className="!font-medium !text-black">
-            {admin.institution?.phone_number ?? "-"}
+            {i.city?.name}
           </Typography>
         </td>
         <td className="py-4 px-2">
@@ -100,11 +130,11 @@ export function TableAdmin() {
             <div className="flex items-center gap-4">
               <IconButton
                 className="!text-[#1b82e6] !min-w-[60px]"
-                variant="text"
                 onClick={() => {
                   setOpen(!open);
-                  setSelectedEdit(admin);
+                  setSelectedEdit(i);
                 }}
+                variant="text"
               >
                 <div className="flex items-center gap-2">
                   <Settings2 size={14} />
@@ -118,8 +148,8 @@ export function TableAdmin() {
               </IconButton>
               <IconButton
                 className="!text-[#f07d82] !min-w-[80px]"
+                onClick={() => handleDelete(i.id)}
                 variant="text"
-                onClick={() => handleDelete(admin.id)}
               >
                 <div className="flex items-center gap-2">
                   <Trash2 size={14} />
@@ -141,7 +171,7 @@ export function TableAdmin() {
       <tr>
         <td colSpan={TABLE_HEAD.length} className="p-4 text-center">
           <Typography variant="small" className="text-black !font-normal">
-            Tidak ada kategori tersedia
+            Tidak ada instansi tersedia
           </Typography>
         </td>
       </tr>
@@ -150,29 +180,6 @@ export function TableAdmin() {
 
   return (
     <Card className="h-full w-full overflow-scroll !shadow-none">
-      <Dialog
-        open={open}
-        handler={() => setOpen(!open)}
-        animate={{
-          mount: { scale: 1, y: 0 },
-          unmount: { scale: 0.9, y: -100 },
-        }}
-      >
-        <DialogHeader>
-          <Typography variant="h5">Edit Instansi</Typography>
-        </DialogHeader>
-        <DialogBody>
-          {selectedEdit ? (
-            <FormEditAdmin
-              a={selectedEdit}
-              setOpen={setOpen}
-              mutateAdmin={mutate}
-            />
-          ) : (
-            <Typography>Memuat data...</Typography>
-          )}
-        </DialogBody>
-      </Dialog>
       <table className="w-full min-w-max table-auto text-left">
         <thead>
           <tr>
@@ -187,6 +194,32 @@ export function TableAdmin() {
         </thead>
         <tbody>{tableContent}</tbody>
       </table>
+      {/* Dialog Edit */}
+      <Dialog
+        open={open}
+        handler={() => setOpen(!open)}
+        animate={{
+          mount: { scale: 1, y: 0 },
+          unmount: { scale: 0.9, y: -100 },
+        }}
+      >
+        <DialogHeader>
+          <Typography variant="h5">Edit Instansi</Typography>
+        </DialogHeader>
+        <DialogBody>
+          {selectedEdit ? (
+            <FormEditInstitution
+              i={selectedEdit}
+              setOpen={setOpen}
+              mutateAdmin={mutate}
+            />
+          ) : (
+            <Typography>Memuat data...</Typography>
+          )}
+        </DialogBody>
+      </Dialog>
+
+      {/* Dialog Delete */}
     </Card>
   );
 }

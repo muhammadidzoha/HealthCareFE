@@ -1,8 +1,8 @@
 import api from "../../api";
 
-export const getAllUsers = async (accessToken) => {
+export const getAllInstitution = async (accessToken) => {
   try {
-    const response = await api.get(import.meta.env.VITE_API_USERS, {
+    const response = await api.get(import.meta.env.VITE_API_INSTITUTIONS, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -13,10 +13,10 @@ export const getAllUsers = async (accessToken) => {
   }
 };
 
-export const createUser = async (accessToken, data) => {
+export const createInstitution = async (accessToken, data) => {
   try {
     const response = await api.post(
-      import.meta.env.VITE_API_CREATE_USER,
+      import.meta.env.VITE_API_INSTITUTIONS,
       data,
       {
         headers: {
@@ -30,10 +30,10 @@ export const createUser = async (accessToken, data) => {
   }
 };
 
-export const updateUser = async (accessToken, data, id) => {
+export const editInstitution = async (accessToken, data, id) => {
   try {
     const response = await api.put(
-      import.meta.env.VITE_API_USERS + "/" + id,
+      import.meta.env.VITE_API_INSTITUTIONS + "/" + id,
       data,
       {
         headers: {
@@ -47,16 +47,25 @@ export const updateUser = async (accessToken, data, id) => {
   }
 };
 
-export const deleteUser = async (accessToken, id) => {
+export const deleteInstitution = async (accessToken, id) => {
   try {
     const response = await api.delete(
-      import.meta.env.VITE_API_USERS + "/" + id,
+      import.meta.env.VITE_API_INSTITUTIONS + "/" + id,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       }
     );
+    return response.data;
+  } catch (error) {
+    throw error.response?.data;
+  }
+};
+
+export const getAllLocation = async () => {
+  try {
+    const response = await api.get(import.meta.env.VITE_API_GET_PROVINCES, {});
     return response.data;
   } catch (error) {
     throw error.response?.data;

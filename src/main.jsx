@@ -8,7 +8,7 @@ import { ToastContainer } from "react-toastify";
 createRoot(document.getElementById("root")).render(
   <Router>
     <ThemeProvider>
-      <ToastContainer />
+      <ToastContainer className="z-[10000]" />
       <App />
     </ThemeProvider>
   </Router>

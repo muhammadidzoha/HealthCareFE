@@ -12,7 +12,7 @@ export function SiteHeader({ onClick, data }) {
     <header className="flex sticky top-0 z-50 w-full items-center bg-background shadow-md">
       <div className="flex h-[--header-height] w-full items-center gap-2 px-4">
         <Button
-          className="h-8 w-8 hidden"
+          className="h-8 w-8 md:hidden"
           variant="ghost"
           size="icon"
           onClick={toggleSidebar}
