@@ -8,40 +8,13 @@ import {
 import { useFamilyFormStore } from "@/store/form/familyFormStore";
 import { userStore } from "@/store/users/userStore";
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 export const ParentHomePage = () => {
-  // const [familyMembers, setFamilyMembers] = useState([
-  //     {
-  //         name: 'Ripan Renaldi',
-  //         relation: 'Ayah',
-  //         job: 'Developer',
-  //         height: 165,
-  //         weight: 55,
-  //         birthWeight: 3,
-  //         nutritionStatus: 'Normal'
-  //     },
-  //     {
-  //         name: 'Ripan Renaldi',
-  //         relation: 'Ayah',
-  //         job: 'Developer',
-  //         height: 165,
-  //         weight: 55,
-  //         birthWeight: 3,
-  //         nutritionStatus: 'Normal'
-  //     },
-  //     {
-  //         name: 'Ripan Renaldi',
-  //         relation: 'Ayah',
-  //         job: 'Developer',
-  //         height: 165,
-  //         weight: 55,
-  //         birthWeight: 3,
-  //         nutritionStatus: 'Normal'
-  //     }
-  // ]);
   const { formInput, fatherFormInput } = useFamilyFormStore();
   const { familyMembers, setFamilyMembers } = userStore();
   const [parentQuisioner, setParentQuisioner] = useState([]);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [progressItems, setProgressItems] = useState([
     {
@@ -53,43 +26,6 @@ export const ParentHomePage = () => {
       isFilled: false,
     },
   ]);
-  console.log({ parentQuisioner });
-
-  const [date, setDate] = useState(new Date());
-  const [tooltipText, setTooltipText] = useState(null);
-  const [monthChange, setMonthChange] = useState(null);
-
-  // const specialDays = [
-  //     {
-  //         date: new Date(2025, 3, 14),
-  //         name: "Valentine's Day",
-  //     },
-  //     {
-  //         date: new Date(2025, 1, 14),
-  //         name: "Valentine's Day3",
-  //     },
-  //     {
-  //         date: new Date(2025, 2, 14),
-  //         name: "Valentine's Day2",
-  //     },
-  //     {
-  //         date: new Date(2025, 1, 17),
-  //         name: "Makan siang bersama",
-  //     },
-  // ];
-
-  const handleDayHover = (day) => {
-    const specialDay = specialDays.find(
-      (special) => special.date.toDateString() === day.toDateString()
-    );
-    if (specialDay) {
-      setTooltipText(specialDay.name);
-      setMonthChange(true);
-    } else {
-      setTooltipText(null);
-      setMonthChange(false);
-    }
-  };
 
   const format = {
     headers: [
@@ -111,7 +47,6 @@ export const ParentHomePage = () => {
 
     async function fetchParentQuisioner() {
       const { data } = await getParentQuisioners();
-      console.log({ parentQuisioner: data });
       setProgressItems((prevValue) => {
         const merged = [...prevValue, ...data];
 
@@ -120,12 +55,12 @@ export const ParentHomePage = () => {
             index === self.findIndex((q) => q.title === item.title)
         );
 
-        console.log({ uniqueItems });
-
         return uniqueItems.map((item) => {
           let progress = 0;
           let totalQuestion = 0;
           let url = "";
+          let onClick = () => {};
+
           if (item.title.toLowerCase().includes("data keluarga")) {
             progress = familyMembers.length > 2 ? 100 : 0;
             totalQuestion = 3;
@@ -137,6 +72,7 @@ export const ParentHomePage = () => {
             );
             progress = 50;
             totalQuestion = quisioner.questions?.length ?? 0;
+            url = `quisioners/${quisioner.id}/response?q=1`;
           } else if (item.title.toLowerCase().includes("sehari-hari anak")) {
             const quisioner = uniqueItems.find((value) =>
               value.title.toLowerCase().includes("sehari-hari anak")
@@ -144,7 +80,6 @@ export const ParentHomePage = () => {
             progress = 50;
             totalQuestion = quisioner.questions?.length ?? 0;
           }
-          console.log({ item });
           return {
             title: item.title,
             progress: progress,
@@ -152,6 +87,7 @@ export const ParentHomePage = () => {
             totalAnswered: progress === 100 ? totalQuestion : 0,
             url,
             isFilled: progress === 100,
+            onClick,
           };
         });
       });
@@ -163,8 +99,6 @@ export const ParentHomePage = () => {
 
     fetchFamilyMembersData();
   }, []);
-
-  console.log({ familyMembers });
 
   return (
     <article className="w-full p-4">
