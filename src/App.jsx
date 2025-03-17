@@ -27,6 +27,7 @@ import DevelopmentLayout from "./components/Dashboard/Admin/Question/Development
 import ManagementLayout from "./components/Dashboard/Admin/Question/ManagementLayout";
 import { SelfProfilePage } from "./pages/Dashboard/Parent/SelfProfilePage";
 import { AddProfilePage } from "./pages/Dashboard/Parent/AddProfilePage";
+import { ResponseQuisionerPage } from "./components/Quisioner/ResponseQuisionerPage";
 
 function App() {
   const location = useLocation();
@@ -66,6 +67,10 @@ function App() {
             <Route index element={<HomeParent />} />
             <Route path="profile" element={<SelfProfilePage />} />
             <Route path="profile/create" element={<AddProfilePage />} />
+            <Route
+              path="quisioners/:id/response"
+              element={<ResponseQuisionerPage />}
+            />
           </Route>
 
           <Route path="/dashboard/health-care" element={<HealthCareLayout />}>

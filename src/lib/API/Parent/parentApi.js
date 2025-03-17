@@ -234,3 +234,19 @@ export const getQuisionerById = async (quisionerId) => {
     toast.error(err.response?.data.message || err.message);
   }
 };
+
+export const getNutritionStatusForFamily = async (schoolId) => {
+  try {
+    const response = await api.get(
+      `/institutions/schools/${schoolId}/stats/nutritions/families`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    toast.error(err.response?.data.message || err.message);
+  }
+};
