@@ -106,35 +106,6 @@ export const ParentHomePage = () => {
         <div className="flex gap-5 justify-between w-full">
           <DashboardProgress progressItems={progressItems} />
           <NutritionDoughnoutCart />
-          {/* <div className="bg-white w-min rounded-xl h-min ">
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger>
-                  <Calendar
-                    mode="single"
-                    selected={date}
-                    onSelect={setDate}
-                    className="rounded-md border w-min w-full"
-                    onDayMouseEnter={handleDayHover}
-                    onMonthChange={() => {
-                      setMonthChange(true);
-                    }}
-                    // modifiers={{
-                    //     special: specialDays.map((day) => day.date),
-                    // }}
-                    // modifiersClassNames={{
-                    //     special: "bg-red-500 text-white rounded-full",
-                    // }}
-                  />
-                  {tooltipText && monthChange && (
-                    <TooltipContent className="bg-black text-white p-2 rounded-md text-sm">
-                      {tooltipText}
-                    </TooltipContent>
-                  )}
-                </TooltipTrigger>
-              </Tooltip>
-            </TooltipProvider>
-          </div> */}
         </div>
         <BasicTable
           caption={"Informasi Keluarga"}
