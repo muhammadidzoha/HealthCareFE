@@ -250,3 +250,17 @@ export const getNutritionStatusForFamily = async (schoolId) => {
     toast.error(err.response?.data.message || err.message);
   }
 };
+
+export const getMembersBelongToUser = async () => {
+  try{
+    const response = await api.get('families/members', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`
+      }
+    })
+
+    return response.data;
+  }catch(err) {
+    toast.error(err.response?.data.message || err.message);
+  }
+}

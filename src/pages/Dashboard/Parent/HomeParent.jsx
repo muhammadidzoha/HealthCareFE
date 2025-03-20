@@ -1,6 +1,8 @@
 import { NutritionDoughnoutCart } from "@/components/Cart/NutritionDoughnoutCart";
+import Modal from "@/components/Modal/Modal";
 import { DashboardProgress } from "@/components/Progress/DashboardProgress";
 import { BasicTable } from "@/components/Table/BasicTable";
+import { Button } from "@/components/ui/button";
 import {
   getFamilyMembers,
   getParentQuisioners,
@@ -8,7 +10,7 @@ import {
 import { useFamilyFormStore } from "@/store/form/familyFormStore";
 import { userStore } from "@/store/users/userStore";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 export const ParentHomePage = () => {
   const { formInput, fatherFormInput } = useFamilyFormStore();
@@ -22,7 +24,7 @@ export const ParentHomePage = () => {
       progress: Math.round(familyMembers.length > 2 ? 100 : 0),
       totalQuestion: 3,
       totalAnswered: 5,
-      url: "family/create",
+      url: "create",
       isFilled: false,
     },
   ]);
@@ -58,7 +60,7 @@ export const ParentHomePage = () => {
         return uniqueItems.map((item) => {
           let progress = 0;
           let totalQuestion = 0;
-          let url = "";
+          let url = item.url ?? "";
           let onClick = () => {};
 
           if (item.title.toLowerCase().includes("data keluarga")) {
@@ -102,19 +104,27 @@ export const ParentHomePage = () => {
     fetchFamilyMembersData();
   }, []);
 
+  const [isOpen, setIsOpen] = useState(familyMembers.length > 0 ? false : true)
+
+
   return (
     <article className="w-full p-4">
+      <Modal isOpen={isOpen} setIsOpen={setIsOpen} title="Isi Data Diri Terlebih dahulu">
+        <Button type="button" asChild>
+          <Link to="/dashboard/parent/profile/create">Isi data diri</Link>
+        </Button>
+      </Modal>
       <section>
         <div className="flex gap-5 justify-between w-full">
           <DashboardProgress progressItems={progressItems} />
           <NutritionDoughnoutCart />
         </div>
-        <BasicTable
+        {/* <BasicTable
           caption={"Informasi Keluarga"}
           data={[]}
           format={format}
           title={"Tabel Keluarga"}
-        />
+        /> */}
       </section>
     </article>
   );

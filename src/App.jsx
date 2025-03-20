@@ -1,32 +1,35 @@
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
-import LandingPageLayout from "./layouts/LandingPageLayout";
-import Header from "./components/Header/Header";
-import Footer from "./components/Footer/Footer";
-import AuthLayout from "./layouts/AuthLayout";
-import SignIn from "./pages/Auth/SignIn";
-import Home from "./pages/Dashboard/Admin/Home";
-import SignUp from "./pages/Auth/SignUp";
-import { ParentHomePage as HomeParent } from "./pages/Dashboard/Parent/HomeParent";
-import Category from "./pages/Dashboard/Admin/Category";
-import Question from "./pages/Dashboard/Admin/Question";
-import Admin from "./pages/Dashboard/Admin/Admin";
-import Institution from "./pages/Dashboard/Admin/Institution";
-import AdminLayout from "./layouts/AdminLayout";
-import ParentLayout from "./layouts/ParentLayout";
-import InstitutionLayout from "./layouts/InstitutionLayout";
-import HealthCareLayout from "./layouts/HealthCareLayout";
-import HomeInstitution from "./pages/Dashboard/Institution/HomeInstitution";
-import HomeHealthCare from "./pages/Dashboard/HealthCare/HomeHealthCare";
-import KnowledgeLayout from "./components/Dashboard/Admin/Question/KnowledgeLayout";
-import LevelLayout from "./components/Dashboard/Admin/Question/LevelLayout";
+import DevelopmentLayout from "./components/Dashboard/Admin/Question/DevelopmentLayout";
 import EducationLayout from "./components/Dashboard/Admin/Question/EducationLayout";
 import HabitsLayout from "./components/Dashboard/Admin/Question/HabitsLayout";
-import ServicesLayout from "./components/Dashboard/Admin/Question/ServicesLayout";
-import DevelopmentLayout from "./components/Dashboard/Admin/Question/DevelopmentLayout";
+import KnowledgeLayout from "./components/Dashboard/Admin/Question/KnowledgeLayout";
+import LevelLayout from "./components/Dashboard/Admin/Question/LevelLayout";
 import ManagementLayout from "./components/Dashboard/Admin/Question/ManagementLayout";
-import { SelfProfilePage } from "./pages/Dashboard/Parent/SelfProfilePage";
-import { AddProfilePage } from "./pages/Dashboard/Parent/AddProfilePage";
+import ServicesLayout from "./components/Dashboard/Admin/Question/ServicesLayout";
+import Footer from "./components/Footer/Footer";
+import Header from "./components/Header/Header";
 import { ResponseQuisionerPage } from "./components/Quisioner/ResponseQuisionerPage";
+import AdminLayout from "./layouts/AdminLayout";
+import AuthLayout from "./layouts/AuthLayout";
+import HealthCareLayout from "./layouts/HealthCareLayout";
+import InstitutionLayout from "./layouts/InstitutionLayout";
+import LandingPageLayout from "./layouts/LandingPageLayout";
+import ParentLayout from "./layouts/ParentLayout";
+import SignIn from "./pages/Auth/SignIn";
+import SignUp from "./pages/Auth/SignUp";
+import Admin from "./pages/Dashboard/Admin/Admin";
+import Category from "./pages/Dashboard/Admin/Category";
+import Home from "./pages/Dashboard/Admin/Home";
+import Institution from "./pages/Dashboard/Admin/Institution";
+import Question from "./pages/Dashboard/Admin/Question";
+import HomeHealthCare from "./pages/Dashboard/HealthCare/HomeHealthCare";
+import HomeInstitution from "./pages/Dashboard/Institution/HomeInstitution";
+import { AddProfilePage } from "./pages/Dashboard/Parent/AddProfilePage";
+import {FamilyFormPage} from "./pages/Dashboard/Parent/FamilyFormPage/FamilyFormPage";
+import { ParentHomePage as HomeParent } from "./pages/Dashboard/Parent/HomeParent";
+import { SelfProfilePage } from "./pages/Dashboard/Parent/SelfProfilePage";
+import { MembersPage } from "./pages/Dashboard/Parent/Member/MembersPage";
+import { ProfileFormPage } from "./pages/Dashboard/Parent/FamilyFormPage/ProfileFormPage";
 
 function App() {
   const location = useLocation();
@@ -65,10 +68,16 @@ function App() {
           <Route path="/dashboard/parent" element={<ParentLayout />}>
             <Route index element={<HomeParent />} />
             <Route path="profile" element={<SelfProfilePage />} />
-            <Route path="profile/create" element={<AddProfilePage />} />
+            <Route path="profile/create" element={<ProfileFormPage />} />
+            <Route path="profile/edit" element={<AddProfilePage />} />
+            <Route path="create" element={<FamilyFormPage />} />
             <Route
               path="quisioners/:id/response"
               element={<ResponseQuisionerPage />}
+            />
+            <Route
+              path="members"
+              element={<MembersPage />}
             />
           </Route>
 
