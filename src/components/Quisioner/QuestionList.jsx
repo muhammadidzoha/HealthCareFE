@@ -14,7 +14,6 @@ export const QuestionList = ({ questions = [], title }) => {
     setProgressValue(Math.ceil((currentPage / questions.length) * 100));
   }, [searchParams.get("q")]);
 
-  console.log({ question: questions[currentIndex] });
   return (
     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white shadow-md rounded-md w-2/4 p-4">
       <Progress

@@ -6,7 +6,6 @@ import AuthLayout from "./layouts/AuthLayout";
 import SignIn from "./pages/Auth/SignIn";
 import Home from "./pages/Dashboard/Admin/Home";
 import SignUp from "./pages/Auth/SignUp";
-// import HomeParent from "./pages/Dashboard/Parent/HomeParent";
 import { ParentHomePage as HomeParent } from "./pages/Dashboard/Parent/HomeParent";
 import Category from "./pages/Dashboard/Admin/Category";
 import Question from "./pages/Dashboard/Admin/Question";

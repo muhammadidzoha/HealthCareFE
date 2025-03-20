@@ -79,6 +79,8 @@ export const ParentHomePage = () => {
             );
             progress = 50;
             totalQuestion = quisioner.questions?.length ?? 0;
+            url = `quisioners/${quisioner.id}/response?q=1`;
+
           }
           return {
             title: item.title,
