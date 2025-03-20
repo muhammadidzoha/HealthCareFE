@@ -13,6 +13,7 @@ export const ProgressList = ({ progressItems }) => {
           url={item.url}
           key={item.url}
           isFilled={item.isFilled}
+          onClick={item.onClick}
         />
       ))}
     </div>

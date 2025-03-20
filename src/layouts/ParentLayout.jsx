@@ -2,14 +2,12 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import {
-  Building,
-  ChartBarStacked,
-  CircleHelp,
-  LayoutDashboard,
-  LockKeyhole,
+  LayoutDashboard
 } from "lucide-react";
 import { useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { MdOutlineFamilyRestroom } from "react-icons/md";
+
 
 export default function ParentLayout() {
   const location = useLocation();
@@ -47,6 +45,12 @@ export default function ParentLayout() {
         url: "/dashboard/parent",
         icon: LayoutDashboard,
         isActive: location.pathname === "/dashboard/parent",
+      },
+      {
+        title: "Keluarga",
+        url: "/dashboard/parent/members",
+        icon: MdOutlineFamilyRestroom,
+        isActive: location.pathname === "/dashboard/parent/members",
       },
     ],
   };

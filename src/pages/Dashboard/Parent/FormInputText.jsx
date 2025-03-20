@@ -1,6 +1,6 @@
 import React from "react";
-import { Label } from "./Label";
-import { Input } from "./Input";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
 export const FormInputText = ({

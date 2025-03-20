@@ -1,100 +1,33 @@
-import { TableAdmin } from "@/components/Dashboard/Admin/Admin/TableAdmin";
+import { NutritionDoughnoutCart } from "@/components/Cart/NutritionDoughnoutCart";
+import Modal from "@/components/Modal/Modal";
 import { DashboardProgress } from "@/components/Progress/DashboardProgress";
 import { BasicTable } from "@/components/Table/BasicTable";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Button } from "@/components/ui/button";
 import {
   getFamilyMembers,
   getParentQuisioners,
 } from "@/lib/API/Parent/parentApi";
 import { useFamilyFormStore } from "@/store/form/familyFormStore";
 import { userStore } from "@/store/users/userStore";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 
 export const ParentHomePage = () => {
-  // const [familyMembers, setFamilyMembers] = useState([
-  //     {
-  //         name: 'Ripan Renaldi',
-  //         relation: 'Ayah',
-  //         job: 'Developer',
-  //         height: 165,
-  //         weight: 55,
-  //         birthWeight: 3,
-  //         nutritionStatus: 'Normal'
-  //     },
-  //     {
-  //         name: 'Ripan Renaldi',
-  //         relation: 'Ayah',
-  //         job: 'Developer',
-  //         height: 165,
-  //         weight: 55,
-  //         birthWeight: 3,
-  //         nutritionStatus: 'Normal'
-  //     },
-  //     {
-  //         name: 'Ripan Renaldi',
-  //         relation: 'Ayah',
-  //         job: 'Developer',
-  //         height: 165,
-  //         weight: 55,
-  //         birthWeight: 3,
-  //         nutritionStatus: 'Normal'
-  //     }
-  // ]);
   const { formInput, fatherFormInput } = useFamilyFormStore();
   const { familyMembers, setFamilyMembers } = userStore();
+  const [parentQuisioner, setParentQuisioner] = useState([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const [progressItems, setProgressItems] = useState([
     {
       title: "Data Keluarga",
-      progress: Math.round(33),
-      totalQuestion: 5,
+      progress: Math.round(familyMembers.length > 2 ? 100 : 0),
+      totalQuestion: 3,
       totalAnswered: 5,
-      url: "family/create",
+      url: "create",
       isFilled: false,
     },
   ]);
-
-  const [date, setDate] = useState(new Date());
-  const [tooltipText, setTooltipText] = useState(null);
-  const [monthChange, setMonthChange] = useState(null);
-  const [parentQuisioner, setParentQuisioner] = useState([]);
-
-  // const specialDays = [
-  //     {
-  //         date: new Date(2025, 3, 14),
-  //         name: "Valentine's Day",
-  //     },
-  //     {
-  //         date: new Date(2025, 1, 14),
-  //         name: "Valentine's Day3",
-  //     },
-  //     {
-  //         date: new Date(2025, 2, 14),
-  //         name: "Valentine's Day2",
-  //     },
-  //     {
-  //         date: new Date(2025, 1, 17),
-  //         name: "Makan siang bersama",
-  //     },
-  // ];
-
-  const handleDayHover = (day) => {
-    const specialDay = specialDays.find(
-      (special) => special.date.toDateString() === day.toDateString()
-    );
-    if (specialDay) {
-      setTooltipText(specialDay.name);
-      setMonthChange(true);
-    } else {
-      setTooltipText(null);
-      setMonthChange(false);
-    }
-  };
 
   const format = {
     headers: [
@@ -116,57 +49,82 @@ export const ParentHomePage = () => {
 
     async function fetchParentQuisioner() {
       const { data } = await getParentQuisioners();
+      setProgressItems((prevValue) => {
+        const merged = [...prevValue, ...data];
+
+        const uniqueItems = merged.filter(
+          (item, index, self) =>
+            index === self.findIndex((q) => q.title === item.title)
+        );
+
+        return uniqueItems.map((item) => {
+          let progress = 0;
+          let totalQuestion = 0;
+          let url = item.url ?? "";
+          let onClick = () => {};
+
+          if (item.title.toLowerCase().includes("data keluarga")) {
+            progress = familyMembers.length > 2 ? 100 : 0;
+            totalQuestion = 3;
+          } else if (
+            item.title.toLowerCase().includes("pengetahuan gizi seimbang")
+          ) {
+            const quisioner = uniqueItems.find((value) =>
+              value.title.toLowerCase().includes("pengetahuan gizi seimbang")
+            );
+            progress = 50;
+            totalQuestion = quisioner.questions?.length ?? 0;
+            url = `quisioners/${quisioner.id}/response?q=1&type=MULTIPLE_CHOICE`;
+          } else if (item.title.toLowerCase().includes("sehari-hari anak")) {
+            const quisioner = uniqueItems.find((value) =>
+              value.title.toLowerCase().includes("sehari-hari anak")
+            );
+            progress = 50;
+            totalQuestion = quisioner.questions?.length ?? 0;
+            url = `quisioners/${quisioner.id}/response?q=1&type=SCALE`;
+
+          }
+          return {
+            title: item.title,
+            progress: progress,
+            totalQuestion: totalQuestion,
+            totalAnswered: progress === 100 ? totalQuestion : 0,
+            url,
+            isFilled: progress === 100,
+            onClick,
+          };
+        });
+      });
+
       setParentQuisioner(data);
     }
+
     fetchParentQuisioner();
 
     fetchFamilyMembersData();
   }, []);
 
-  console.log({ familyMembers });
+  const [isOpen, setIsOpen] = useState(false)
+
 
   return (
     <article className="w-full p-4">
+      <Modal isOpen={familyMembers.length === 0} setIsOpen={setIsOpen} title="Isi Data Diri Terlebih dahulu">
+        <Button type="button" asChild>
+          <Link to="/dashboard/parent/profile/create">Isi data diri</Link>
+        </Button>
+      </Modal>
       <section>
         <div className="flex gap-5 justify-between w-full">
           <DashboardProgress progressItems={progressItems} />
-          <div className="bg-white w-min rounded-xl h-min ">
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger>
-                  <Calendar
-                    mode="single"
-                    selected={date}
-                    onSelect={setDate}
-                    className="rounded-md border w-min w-full"
-                    onDayMouseEnter={handleDayHover}
-                    onMonthChange={() => {
-                      setMonthChange(true);
-                    }}
-                    // modifiers={{
-                    //     special: specialDays.map((day) => day.date),
-                    // }}
-                    // modifiersClassNames={{
-                    //     special: "bg-red-500 text-white rounded-full",
-                    // }}
-                  />
-                  {tooltipText && monthChange && (
-                    <TooltipContent className="bg-black text-white p-2 rounded-md text-sm">
-                      {tooltipText}
-                    </TooltipContent>
-                  )}
-                </TooltipTrigger>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
+          <NutritionDoughnoutCart />
         </div>
-        <BasicTable
+        {/* <BasicTable
           caption={"Informasi Keluarga"}
           data={[]}
           format={format}
           title={"Tabel Keluarga"}
-        />
-        {/* <TableAdmin /> */}
+        /> */}
       </section>
     </article>
   );

@@ -234,3 +234,77 @@ export const getQuisionerById = async (quisionerId) => {
     toast.error(err.response?.data.message || err.message);
   }
 };
+
+export const getNutritionStatusForFamily = async (schoolId) => {
+  try {
+    const response = await api.get(
+      `/institutions/schools/${schoolId}/stats/nutritions/families`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    toast.error(err.response?.data.message || err.message);
+  }
+};
+
+export const getMembersBelongToUser = async () => {
+  try{
+    const response = await api.get('families/members', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`
+      }
+    })
+
+    return response.data;
+  }catch(err) {
+    toast.error(err.response?.data.message || err.message);
+  }
+}
+
+export const addMemberAfterLogin = async (payload) => {
+  try{
+    const response = await api.put("/families/v2/members", {
+      ...payload,
+      fullName: payload.profile.fullName,
+      birthDate: payload.selfBirthDate,
+      education: payload.profile.education.toUpperCase(),
+      gender: payload.profile.gender,
+      relation: payload.profile.relation,
+      phoneNumber: payload.profile.phoneNumber
+    }, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`
+      }
+    });
+    return response.data
+  }catch(err) {
+    toast.error(err.response?.data.message || err.message);
+
+  }
+}
+
+export const reponseQuisioner = async (quisionerId, payload) => {
+  try{
+    const {data: {data: member}} = await api.get("/families/v2/members/whoose/login", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`
+      }
+    });
+    console.log({member});
+    const response = await api.post(`/quisioners/${quisionerId}/responses`, {
+      familyMemberId: member.id,
+      answers: payload
+    }, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`
+      }
+    });
+    return response.data
+  }catch(err) {
+    toast.error(err.response?.data.message || err.message);
+  }
+}
