@@ -68,7 +68,7 @@ function App() {
           <Route path="/dashboard/parent" element={<ParentLayout />}>
             <Route index element={<HomeParent />} />
             <Route path="profile" element={<SelfProfilePage />} />
-            <Route path="profile/create" element={<ProfileFormPage />} />
+            <Route path="profile/create" element={<ProfileFormPage buttonType={"SUBMIT"}/>} />
             <Route path="profile/edit" element={<AddProfilePage />} />
             <Route path="create" element={<FamilyFormPage />} />
             <Route

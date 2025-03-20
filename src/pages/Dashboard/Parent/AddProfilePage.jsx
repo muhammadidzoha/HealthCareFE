@@ -2,6 +2,7 @@ import { toast } from "react-toastify";
 import { ProfileFormTemplate } from "./ProfileFormTemplate";
 import { useNavigate } from "react-router-dom";
 import { useFamilyFormStore } from "@/store/form/familyFormStore";
+import { addMemberAfterLogin } from "@/lib/API/Parent/parentApi";
 export const AddProfilePage = ({
   buttonType,
   children,
@@ -25,11 +26,13 @@ export const AddProfilePage = ({
     }
   };
 
-  const handleSubmitParentForm = (type = "PARENT") => {
+  const handleSubmitParentForm = async (type = "PARENT") => {
     const savedPayload = { ...formInput, selfBirthDate: birthDate };
     console.log({ savedPayload });
     localStorage.setItem("formInput", JSON.stringify(savedPayload));
     localStorage.setItem("selfFormPage", true);
+    const {data} = await addMemberAfterLogin(savedPayload);
+    console.log({data});
     toast.success(`Data berhasil disimpan`, {
       autoClose: 1500,
       onClose: () => {

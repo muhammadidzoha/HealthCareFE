@@ -97,7 +97,7 @@ export function TableParent() {
               ))}
             </tr>
           </thead>
-          <tbody>
+          <tbody className="relative">
             {members.length > 0 ? (
               members.map(
                 (

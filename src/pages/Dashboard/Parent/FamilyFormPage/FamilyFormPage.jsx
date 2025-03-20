@@ -17,6 +17,8 @@ export const FamilyFormPage = () => {
     const [currentPage, setCurrentPage] = useState(searchParam.get("page") ?? "");
     const { formInput, onInputChange, fatherFormInput, fatherBirthDate, childrenFormInput, addChildren, onChildrenInputForm, setFatherBirthDate } = useFamilyFormStore()
 
+    console.log({formInput, fatherFormInput, childrenFormInput})
+
     const handleFatherInputChange = (key, value, parentKey = null) => {
         onInputChange(key, value, parentKey, "fatherFormInput")
     }

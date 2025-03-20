@@ -74,14 +74,14 @@ export const ParentHomePage = () => {
             );
             progress = 50;
             totalQuestion = quisioner.questions?.length ?? 0;
-            url = `quisioners/${quisioner.id}/response?q=1`;
+            url = `quisioners/${quisioner.id}/response?q=1&type=MULTIPLE_CHOICE`;
           } else if (item.title.toLowerCase().includes("sehari-hari anak")) {
             const quisioner = uniqueItems.find((value) =>
               value.title.toLowerCase().includes("sehari-hari anak")
             );
             progress = 50;
             totalQuestion = quisioner.questions?.length ?? 0;
-            url = `quisioners/${quisioner.id}/response?q=1`;
+            url = `quisioners/${quisioner.id}/response?q=1&type=SCALE`;
 
           }
           return {
@@ -104,12 +104,12 @@ export const ParentHomePage = () => {
     fetchFamilyMembersData();
   }, []);
 
-  const [isOpen, setIsOpen] = useState(familyMembers.length > 0 ? false : true)
+  const [isOpen, setIsOpen] = useState(false)
 
 
   return (
     <article className="w-full p-4">
-      <Modal isOpen={isOpen} setIsOpen={setIsOpen} title="Isi Data Diri Terlebih dahulu">
+      <Modal isOpen={familyMembers.length === 0} setIsOpen={setIsOpen} title="Isi Data Diri Terlebih dahulu">
         <Button type="button" asChild>
           <Link to="/dashboard/parent/profile/create">Isi data diri</Link>
         </Button>
