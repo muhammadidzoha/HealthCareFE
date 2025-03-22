@@ -7,4 +7,5 @@ export const userStore = create((set) => ({
       familyMembers,
     }));
   },
+  userLogin: null
 }));

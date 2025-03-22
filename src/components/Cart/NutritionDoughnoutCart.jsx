@@ -44,7 +44,6 @@ export function NutritionDoughnoutCart() {
   const nutritionNormal = nutritionFamily.find((stat) => stat.status_id === 3);
   const nutritionRisk = nutritionFamily.find((stat) => stat.status_id === 4);
   const nutritionFat = nutritionFamily.find((stat) => stat.status_id === 5);
-  console.log({ nutritionNormal });
   const chartData = [
     {
       nutrition: "normal",
@@ -66,13 +65,11 @@ export function NutritionDoughnoutCart() {
     const fetchNutritionForFamily = async () => {
       if (familyMembers.length > 0) {
         const { data } = await getNutritionStatusForFamily(familyMembers[0].id);
-        console.log({ data });
         setNutritionFamily(data);
       }
     };
     // fetchNutritionForFamily();
   }, [familyMembers]);
-  console.log({ nutritionFamily });
   return (
     <Card className="flex flex-col relative">
       <CardHeader className="items-center pb-0 text-xl">

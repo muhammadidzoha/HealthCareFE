@@ -308,3 +308,16 @@ export const reponseQuisioner = async (quisionerId, payload) => {
     toast.error(err.response?.data.message || err.message);
   }
 }
+
+export const getUserResponse = async (quisionerId) => {
+  try{
+    const response = await api.get(`/quisioners/${quisionerId}/response`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`
+      }
+    })
+    return response.data
+  }catch(err) {
+    toast.error(err.response?.data.message || err.message);
+  }
+}

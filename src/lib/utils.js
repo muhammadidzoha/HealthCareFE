@@ -42,3 +42,10 @@ export const mapMemberPayload = (familyData) => ({
     class: `${familyData.class}`,
   }),
 });
+
+export const formatBirthDate = (date) => {
+  if(!date) {
+    return "-";
+  }
+  return new Date(date).toISOString().split("T")[0];
+}

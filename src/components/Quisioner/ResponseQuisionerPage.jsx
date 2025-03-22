@@ -1,11 +1,12 @@
 import { getQuisionerById, reponseQuisioner } from "@/lib/API/Parent/parentApi";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { QuestionList } from "./QuestionList";
 import { quisionerStore } from "@/store/Quisioner/quisionerStore";
 import { toast } from "react-toastify";
 
 export const ResponseQuisionerPage = () => {
+  const navigate = useNavigate();
   const [quisioners, setQuisioners] = useState();
   const {userBooleanResponses} = quisionerStore();
   const { id } = useParams();

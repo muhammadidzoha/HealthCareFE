@@ -13,7 +13,7 @@ import {
   } from "@/components/ui/alert-dialog"
   
 
-export default function Modal({isOpen = false, setIsOpen = () => {}, title = "", children}) {
+export default function Modal({isOpen = true, setIsOpen = () => {}, title = "", children}) {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
