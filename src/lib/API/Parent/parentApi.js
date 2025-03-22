@@ -252,72 +252,105 @@ export const getNutritionStatusForFamily = async (schoolId) => {
 };
 
 export const getMembersBelongToUser = async () => {
-  try{
-    const response = await api.get('families/members', {
+  try {
+    const response = await api.get("families/members", {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`
-      }
-    })
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
 
     return response.data;
-  }catch(err) {
+  } catch (err) {
     toast.error(err.response?.data.message || err.message);
   }
-}
+};
 
 export const addMemberAfterLogin = async (payload) => {
-  try{
-    const response = await api.put("/families/v2/members", {
-      ...payload,
-      fullName: payload.profile.fullName,
-      birthDate: payload.selfBirthDate,
-      education: payload.profile.education.toUpperCase(),
-      gender: payload.profile.gender,
-      relation: payload.profile.relation,
-      phoneNumber: payload.profile.phoneNumber
-    }, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`
+  try {
+    const response = await api.put(
+      "/families/v2/members",
+      {
+        ...payload,
+        fullName: payload.profile.fullName,
+        birthDate: payload.selfBirthDate,
+        education: payload.profile.education.toUpperCase(),
+        gender: payload.profile.gender,
+        relation: payload.profile.relation,
+        phoneNumber: payload.profile.phoneNumber,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
       }
-    });
-    return response.data
-  }catch(err) {
+    );
+    return response.data;
+  } catch (err) {
     toast.error(err.response?.data.message || err.message);
-
   }
-}
+};
 
 export const reponseQuisioner = async (quisionerId, payload) => {
-  try{
-    const {data: {data: member}} = await api.get("/families/v2/members/whoose/login", {
+  try {
+    const {
+      data: { data: member },
+    } = await api.get("/families/v2/members/whoose/login", {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`
-      }
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
     });
-    console.log({member});
-    const response = await api.post(`/quisioners/${quisionerId}/responses`, {
-      familyMemberId: member.id,
-      answers: payload
-    }, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`
+    console.log({ member });
+    const response = await api.post(
+      `/quisioners/${quisionerId}/responses`,
+      {
+        familyMemberId: member.id,
+        answers: payload,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
       }
-    });
-    return response.data
-  }catch(err) {
+    );
+    return response.data;
+  } catch (err) {
     toast.error(err.response?.data.message || err.message);
   }
-}
+};
 
 export const getUserResponse = async (quisionerId) => {
-  try{
+  try {
     const response = await api.get(`/quisioners/${quisionerId}/response`, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`
-      }
-    })
-    return response.data
-  }catch(err) {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
     toast.error(err.response?.data.message || err.message);
   }
-}
+};
+
+export const updateAvatar = async (userLoginId, file) => {
+  try {
+    console.log({ file });
+    if (!file) {
+      throw new Error("cannot updaet");
+    }
+    const formData = new FormData();
+    formData.set("avatar", file);
+    const response = await api.put(
+      `/families/v2/members/${userLoginId}/avatar`,
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    toast.error(err.response?.data.message || err.message);
+    return;
+  }
+};
