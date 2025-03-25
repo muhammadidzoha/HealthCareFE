@@ -85,20 +85,76 @@ export const addMember = async (familyId, familyData) => {
   return response.data;
 };
 
-export const addMembersTofamily = async (members) => {
+export const addMembersTofamily = async (members, onSuccess) => {
   try {
-    // const [familyData] = members;
-    // const familyId = await createFamily({
-    //   headFamily: familyData.profile.fullName,
-    //   headPhoneNumber: familyData.profile.phoneNumber
-    // });
-    // console.log({ familyId });
-    // localStorage.setItem('familyId', familyId);
     const membersPayload = members.map((member) => mapMemberPayload(member));
-    const response = await api.post(
-      "/families",
+    const child = membersPayload.find((member) => member.institutionId);
+
+    const {
+      data: [member],
+    } = await getMembersBelongToUser();
+    const newMembers = membersPayload
+      .filter((mb) => mb.relation !== member.relation)
+      .map((mb) => {
+        return {
+          ...mb,
+          residence: {
+            ...member.residence,
+          },
+          institutionId: child.institutionId,
+        };
+      });
+
+    newMembers.forEach(async (familyMember) => {
+      const response = await api.put(
+        `/families/v2/members/${member.family_id}`,
+        familyMember,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
+    });
+
+    /**
+     * {
+    "fullName": "Nama Ibu Baru",
+    "birthDate": "2020-04-25",
+    "education": "D3",
+    "job": {
+        "jobTypeId": 2,
+        "income": 1500000
+    },
+    "gender": "P",
+    "relation": "IBU",
+    "residence": {
+        "address": "Rumah Saya",
+        "status": "OWN"
+    },
+    "phoneNumber": "081280010645"
+    // "institutionId": 2
+    // "avatar": "asd"
+}
+     */
+    const updatedMember = await api.put(
+      `/families/v2/members/${member.id}/profile`,
       {
-        members: membersPayload,
+        institutionId: child.institutionId,
+        fullName: member.full_name,
+        birthDate: member.birth_date,
+        education: member.education,
+        job: {
+          jobTypeId: member.job.job_type_id,
+          income: member.job.income,
+        },
+        gender: member.gender,
+        relation: member.relation,
+        residence: {
+          address: member.residence.address,
+          status: member.residence.status,
+        },
+        phoneNumber: member.phone_number,
       },
       {
         headers: {
@@ -106,7 +162,7 @@ export const addMembersTofamily = async (members) => {
         },
       }
     );
-    return response.data;
+    onSuccess();
   } catch (err) {
     const message = err.response?.data.message || err.message;
     console.log(err);
@@ -235,10 +291,10 @@ export const getQuisionerById = async (quisionerId) => {
   }
 };
 
-export const getNutritionStatusForFamily = async (schoolId) => {
+export const getNutritionStatusForFamily = async () => {
   try {
     const response = await api.get(
-      `/institutions/schools/${schoolId}/stats/nutritions/families`,
+      `/institutions/schools/stats/nutritions/all`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -352,5 +408,86 @@ export const updateAvatar = async (userLoginId, file) => {
   } catch (err) {
     toast.error(err.response?.data.message || err.message);
     return;
+  }
+};
+
+export const updateMember = async (memberId, payload) => {
+  try {
+    //   {
+    //     "fullName": "Nama Ibu Baru",
+    //     "birthDate": "2020-04-25",
+    //     "education": "D3",
+    //     "job": {
+    //         "jobTypeId": 2,
+    //         "income": 1500000
+    //     },
+    //     "gender": "P",
+    //     "relation": "IBU",
+    //     "residence": {
+    //         "address": "Rumah Saya",
+    //         "status": "OWN"
+    //     },
+    //     "phoneNumber": "081280010645"
+    //     // "institutionId": 2
+    //     // "avatar": "asd"
+    // }
+    const sendPayload = {
+      fullName: payload.profile.fullName,
+      birthDate: payload.selfBirthDate,
+      education: payload.profile.education.toUpperCase(),
+      relation: payload.profile.relation,
+      gender: payload.profile.gender,
+      phoneNumber: payload.profile.phoneNumber,
+      job: {
+        jobTypeId: payload.job.jobTypeId,
+        income: payload.job.income,
+      },
+      residence: {
+        status: payload.residence.status,
+        address: payload.residence.address,
+      },
+    };
+    const response = await api.put(
+      `/families/v2/members/${memberId}/profile`,
+      sendPayload,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    toast.error(err.response?.data.message || err.message);
+    return;
+  }
+};
+
+export const getClassesWithCategories = async (institutionId) => {
+  try {
+    const response = await api.get(
+      `institutions/schools/${institutionId}/classes-categories`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    toast.error(err.response?.data.message || err.message);
+  }
+};
+
+export const getSchools = async () => {
+  try {
+    const response = await api.get(`/institutions/schools`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    toast.error(err.response?.data.message || err.message);
   }
 };

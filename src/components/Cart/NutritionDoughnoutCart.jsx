@@ -39,7 +39,7 @@ const chartConfig = {
 };
 
 export function NutritionDoughnoutCart() {
-  const { familyMembers } = userStore();
+  const { userLogin } = userStore();
   const [nutritionFamily, setNutritionFamily] = useState([]);
   const nutritionNormal = nutritionFamily.find((stat) => stat.status_id === 3);
   const nutritionRisk = nutritionFamily.find((stat) => stat.status_id === 4);
@@ -63,23 +63,25 @@ export function NutritionDoughnoutCart() {
   ];
   useEffect(() => {
     const fetchNutritionForFamily = async () => {
-      if (familyMembers.length > 0) {
-        const { data } = await getNutritionStatusForFamily(familyMembers[0].id);
+      if (!userLogin) {
+        const { data } = await getNutritionStatusForFamily(userLogin);
+        console.log({ data });
         setNutritionFamily(data);
       }
     };
-    // fetchNutritionForFamily();
-  }, [familyMembers]);
+    fetchNutritionForFamily();
+  }, [userLogin]);
+
   return (
     <Card className="flex flex-col relative">
       <CardHeader className="items-center pb-0 text-xl">
-        <CardTitle>Cart Nutrisi Keluarga</CardTitle>
+        <CardTitle>Grafik Nutrisi Keluarga</CardTitle>
         {/* <CardDescription>January - June 2024</CardDescription> */}
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square max-h-[200px] min-w-[300px]"
+          className="mx-auto aspect-square max-h-[200px] min-w-[300px] "
         >
           {nutritionFamily.length > 0 ? (
             <PieChart>

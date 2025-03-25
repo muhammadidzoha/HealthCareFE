@@ -1,42 +1,24 @@
-import React, { useEffect, useRef, useState } from "react";
+import Modal from "@/components/Modal/Modal";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Input } from "@/components/ui/input";
+import { updateAvatar } from "@/lib/API/Parent/parentApi";
+import { getInitials } from "@/lib/utils";
+import { userStore } from "@/store/users/userStore";
+import { useEffect, useRef, useState } from "react";
+import { toast } from "react-toastify";
+import { FormInputText } from "./FormInputText";
 import { PersonalInformation } from "./PersonalInformation";
 import { ProfileNutrition } from "./ProfileNutrition";
-import { userStore } from "@/store/users/userStore";
-import {
-  getMembersBelongToUser,
-  updateAvatar,
-} from "@/lib/API/Parent/parentApi";
-import { getInitials } from "@/lib/utils";
-import Modal from "@/components/Modal/Modal";
-import { FormInputText } from "./FormInputText";
-import { MdEdit } from "react-icons/md";
-import { Input } from "@/components/ui/input";
-import { toast } from "react-toastify";
 
 export const SelfProfilePage = () => {
   const { userLogin } = userStore();
   const inputRef = useRef(null);
   const [changedAvatar, setChangedAvatar] = useState(null);
-  console.log({ userLogin });
-  useEffect(() => {
-    const fecthUserLogin = async () => {
-      const { data } = await getMembersBelongToUser();
-      if (data.length > 0) {
-        userStore.setState((prevState) => ({
-          ...prevState,
-          userLogin: data[0],
-        }));
-      }
-    };
-    fecthUserLogin();
-  }, []);
+
   const [isOpen, setIsOpen] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log({ member: userLogin.id, file: changedAvatar });
     if (!userLogin?.id) {
       toast.error("member id is required", {
         autoClose: 1000,
@@ -55,7 +37,6 @@ export const SelfProfilePage = () => {
       setAvatar(`${import.meta.env.VITE_BASE_URL}public/${userLogin.avatar}`);
     }
   }, [userLogin]);
-  console.log({ avatar });
   return (
     <div className="bg-white text-black rounded-xl p-4">
       <h1 className="font-semibold text-xl">Profile</h1>

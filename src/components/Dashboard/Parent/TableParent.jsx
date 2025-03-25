@@ -57,8 +57,8 @@ export function TableParent() {
     }
     fetchMembers();
   }, []);
-  console.log({members});
-  
+  console.log({ members });
+
   return (
     <Card className="h-full w-full bg-transparent">
       <CardHeader
@@ -75,7 +75,11 @@ export function TableParent() {
           </CnButton>
         </div>
       </CardHeader>
-      <CardBody className={`${members.length > 0 ? "overflow-auto" : "overflow-hidden"} px-0`}>
+      <CardBody
+        className={`${
+          members.length > 0 ? "overflow-auto" : "overflow-hidden"
+        } px-0`}
+      >
         <table className="w-full min-w-max table-auto text-left min-h-20">
           <thead>
             <tr>
@@ -105,7 +109,9 @@ export function TableParent() {
                     id,
                     avatar,
                     full_name,
-                    family: { user: {email} },
+                    family: {
+                      user: { email },
+                    },
                     gender,
                     relation,
                     job: {
@@ -124,7 +130,16 @@ export function TableParent() {
                     <tr key={id}>
                       <td className={classes}>
                         <div className="flex items-center gap-3">
-                          <Avatar src={avatar ?? import.meta.env.VITE_DEFAULT_AVATAR} alt={avatar} size="sm" />
+                          <Avatar
+                            src={
+                              `${
+                                import.meta.env.VITE_BASE_URL
+                              }public/${avatar}` ??
+                              import.meta.env.VITE_DEFAULT_AVATAR
+                            }
+                            alt={avatar}
+                            size="sm"
+                          />
                           <div className="flex flex-col">
                             <Typography
                               variant="small"
@@ -194,8 +209,10 @@ export function TableParent() {
                           color="blue-gray"
                           className="font-normal"
                         >
-                          {nutrition.length > 0 ? nutrition[0].nutrition_status.status : 0}
-                          </Typography>
+                          {nutrition.length > 0
+                            ? nutrition[0].nutrition_status.status
+                            : 0}
+                        </Typography>
                       </td>
                     </tr>
                   );

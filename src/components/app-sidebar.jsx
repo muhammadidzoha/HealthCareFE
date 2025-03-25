@@ -10,6 +10,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { Link } from "react-router-dom";
 
 export function AppSidebar({ data, ...props }) {
   return (
@@ -21,7 +22,7 @@ export function AppSidebar({ data, ...props }) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton variant={"blue"} size="lg" asChild>
-              <a href="/dashboard">
+              <Link to="/dashboard">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-white border border-white text-sidebar-primary-foreground">
                   <img src="/logo.png" className="size-4" alt="logo" />
                 </div>
@@ -33,7 +34,7 @@ export function AppSidebar({ data, ...props }) {
                     Anak Sehat
                   </span>
                 </div>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

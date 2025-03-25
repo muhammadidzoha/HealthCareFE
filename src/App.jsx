@@ -25,7 +25,7 @@ import Question from "./pages/Dashboard/Admin/Question";
 import HomeHealthCare from "./pages/Dashboard/HealthCare/HomeHealthCare";
 import HomeInstitution from "./pages/Dashboard/Institution/HomeInstitution";
 import { AddProfilePage } from "./pages/Dashboard/Parent/AddProfilePage";
-import {FamilyFormPage} from "./pages/Dashboard/Parent/FamilyFormPage/FamilyFormPage";
+import { FamilyFormPage } from "./pages/Dashboard/Parent/FamilyFormPage/FamilyFormPage";
 import { ParentHomePage as HomeParent } from "./pages/Dashboard/Parent/HomeParent";
 import { SelfProfilePage } from "./pages/Dashboard/Parent/SelfProfilePage";
 import { MembersPage } from "./pages/Dashboard/Parent/Member/MembersPage";
@@ -68,17 +68,22 @@ function App() {
           <Route path="/dashboard/parent" element={<ParentLayout />}>
             <Route index element={<HomeParent />} />
             <Route path="profile" element={<SelfProfilePage />} />
-            <Route path="profile/create" element={<ProfileFormPage buttonType={"SUBMIT"}/>} />
-            <Route path="profile/edit" element={<AddProfilePage />} />
+            <Route
+              path="profile/create"
+              element={<ProfileFormPage buttonType={"SUBMIT"} />}
+            />
+            <Route
+              path="profile/edit"
+              element={
+                <ProfileFormPage buttonType={"SUBMIT"} action="update" />
+              }
+            />
             <Route path="create" element={<FamilyFormPage />} />
             <Route
               path="quisioners/:id/response"
               element={<ResponseQuisionerPage />}
             />
-            <Route
-              path="members"
-              element={<MembersPage />}
-            />
+            <Route path="members" element={<MembersPage />} />
           </Route>
 
           <Route path="/dashboard/health-care" element={<HealthCareLayout />}>
