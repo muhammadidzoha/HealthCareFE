@@ -154,7 +154,7 @@ export function TableParent() {
                               color="blue-gray"
                               className="font-normal opacity-70"
                             >
-                              {email}
+                              {relation === "IBU" ? email : "-"}
                             </Typography>
                           </div>
                         </div>
