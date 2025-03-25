@@ -70,9 +70,9 @@ export function TableParent() {
           <Typography variant="h5" color="blue-gray">
             Tabel Keluarga
           </Typography>
-          <CnButton type="button" asChild>
+          {/* <CnButton type="button" asChild>
             <Link to={"/dashboard/parent/create"}>Tambah Data</Link>
-          </CnButton>
+          </CnButton> */}
         </div>
       </CardHeader>
       <CardBody
@@ -132,10 +132,11 @@ export function TableParent() {
                         <div className="flex items-center gap-3">
                           <Avatar
                             src={
-                              `${
-                                import.meta.env.VITE_BASE_URL
-                              }public/${avatar}` ??
-                              import.meta.env.VITE_DEFAULT_AVATAR
+                              avatar
+                                ? `${
+                                    import.meta.env.VITE_BASE_URL
+                                  }public/${avatar}`
+                                : import.meta.env.VITE_DEFAULT_AVATAR
                             }
                             alt={avatar}
                             size="sm"
