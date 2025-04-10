@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useSearchParams } from "react-router-dom";
 
-export const QuestionList = ({ questions = [], title }) => {
+export const QuestionList = ({ questions = [], title, onSubmit = () => {} }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = +searchParams.get("q");
   const [progressValue, setProgressValue] = useState(0);
@@ -14,7 +14,6 @@ export const QuestionList = ({ questions = [], title }) => {
     setProgressValue(Math.ceil((currentPage / questions.length) * 100));
   }, [searchParams.get("q")]);
 
-  console.log({ question: questions[currentIndex] });
   return (
     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white shadow-md rounded-md w-2/4 p-4">
       <Progress
@@ -25,15 +24,20 @@ export const QuestionList = ({ questions = [], title }) => {
       <h1 className="mb-7 text-xl text-center font-bold">{title}</h1>
       <QuestionItem {...questions[currentIndex]} index={currentIndex + 1} />
 
-      <div className="flex mt-6 gap-4 justify-between">
+      <form className="flex mt-6 gap-4 justify-between" onSubmit={(e) => {
+        e.preventDefault();
+        console.log({questions})
+        onSubmit(searchParams.get("type"))
+      }}>
         <Button
           className="max-w-24"
           variant="outline"
           onClick={() => {
             if (currentPage > 1) {
-              setSearchParams({
-                q: +searchParams.get("q") - 1,
-              });
+              setSearchParams(prevValue => ({
+                ...Object.fromEntries(prevValue.entries()),
+                  q: +searchParams.get("q") - 1,
+              }));
               setCurrentIndex((prevValue) => prevValue - 1);
             }
           }}
@@ -46,9 +50,10 @@ export const QuestionList = ({ questions = [], title }) => {
           className="max-w-24 min-w-24 bg-[#1b82e6]"
           onClick={() => {
             if (currentPage !== questions.length) {
-              setSearchParams({
-                q: +searchParams.get("q") + 1,
-              });
+              setSearchParams(prevValue => ({
+                ...Object.fromEntries(prevValue.entries()),
+                  q: +searchParams.get("q") + 1,
+              }));
               setCurrentIndex((prevValue) => prevValue + 1);
             }
           }}
@@ -56,7 +61,7 @@ export const QuestionList = ({ questions = [], title }) => {
         >
           {currentPage === questions.length ? "Submit" : "Next"}
         </Button>
-      </div>
+      </form>
     </div>
   );
 };

@@ -38,7 +38,17 @@ export const mapMemberPayload = (familyData) => ({
     weight: familyData.nutrition.weight,
     birth_weight: familyData.nutrition.birth_weight,
   },
-  ...(familyData.class && {
-    class: `${familyData.class}`,
+  ...(familyData.classId && {
+    classId: familyData.classId,
   }),
+  schoolYear: familyData.schoolYear,
+  semester: familyData.semester,
+  nis: familyData.nis,
 });
+
+export const formatBirthDate = (date) => {
+  if (!date) {
+    return "-";
+  }
+  return new Date(date).toISOString().split("T")[0];
+};

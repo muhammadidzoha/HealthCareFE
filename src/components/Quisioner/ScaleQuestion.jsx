@@ -1,10 +1,25 @@
 import { quisionerStore } from "@/store/Quisioner/quisionerStore";
-import React, { useState } from "react";
-import { FaThumbsDown, FaThumbsUp } from "react-icons/fa6";
-import { FaCircleCheck } from "react-icons/fa6";
+import React from "react";
 
-export const BooleanQuestion = ({ id, question, options, type, index = 1 }) => {
-  const { userBooleanResponse, userBooleanResponses } = quisionerStore();
+import { RiEmotionSadLine } from "react-icons/ri";
+import { RiEmotionNormalLine } from "react-icons/ri";
+import { RiEmotionLaughLine } from "react-icons/ri";
+import { RiEmotionLine } from "react-icons/ri";
+
+export const ScaleQuestion = ({
+  id,
+  question,
+  options,
+  type,
+  index = 1,
+  order = "asc",
+}) => {
+  const {
+    userScaleResponse,
+    userScaleResponses,
+    userBooleanResponse,
+    userBooleanResponses,
+  } = quisionerStore();
 
   const handleChooseAnswer = (id, optionId, score) => {
     quisionerStore.setState((prevState) => {
@@ -38,7 +53,6 @@ export const BooleanQuestion = ({ id, question, options, type, index = 1 }) => {
       };
     });
   };
-
   return (
     <section>
       <h1 className="font-bold text-lg mb-4">{question}?</h1>
@@ -46,7 +60,7 @@ export const BooleanQuestion = ({ id, question, options, type, index = 1 }) => {
         {options.length > 0 ? (
           options.map((option, index) => (
             <button
-              className={`bg-gray-200 size-24 rounded-lg flex flex-col justify-center items-center gap-2 hover:bg-gray-300 transition-colors duration-300 relative  ${
+              className={`bg-gray-200 size-24 rounded-lg flex flex-col justify-center items-center gap-2 hover:bg-gray-300 transition-colors duration-300 text-[10px] font-semibold p-1 ${
                 userBooleanResponse.optionId === option.id &&
                 "!bg-[#1b82e6] text-white"
               }`}
@@ -54,14 +68,11 @@ export const BooleanQuestion = ({ id, question, options, type, index = 1 }) => {
                 handleChooseAnswer(id, option.id, option.score);
               }}
             >
-              {
-                option.title === "Benar" ? (
-                  <FaThumbsUp className="text-[#04ff00] size-10" />
-                ): (
-                  <FaThumbsDown className="text-red-500 size-10" />
-                )
-              }
-              <p className="text-sm font-semibold">{option.title}</p>
+              {index === 0 && <RiEmotionSadLine className="text-[#04ff00] size-10" />}
+              {index === 1 && <RiEmotionNormalLine className="text-[#04ff00] size-10" />}
+              {index === 2 && <RiEmotionLine className="text-[#04ff00] size-10" />}
+              {index === 3 && <RiEmotionLaughLine className="text-[#04ff00] size-10" />}
+              {option.title.toLowerCase()}
             </button>
           ))
         ) : (

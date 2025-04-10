@@ -38,51 +38,63 @@ const chartConfig = {
   },
 };
 
+const chartData = [
+  { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
+  { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
+  { browser: "firefox", visitors: 187, fill: "var(--color-firefox)" },
+  { browser: "edge", visitors: 173, fill: "var(--color-edge)" },
+  { browser: "other", visitors: 90, fill: "var(--color-other)" },
+];
+
 export function NutritionDoughnoutCart() {
-  const { familyMembers } = userStore();
+  const { userLogin } = userStore();
   const [nutritionFamily, setNutritionFamily] = useState([]);
-  const nutritionNormal = nutritionFamily.find((stat) => stat.status_id === 3);
-  const nutritionRisk = nutritionFamily.find((stat) => stat.status_id === 4);
-  const nutritionFat = nutritionFamily.find((stat) => stat.status_id === 5);
-  console.log({ nutritionNormal });
-  const chartData = [
-    {
-      nutrition: "normal",
-      jumlah: nutritionNormal?.total ?? 0,
-      fill: "#11ff26",
-    },
-    {
-      nutrition: "riskFat",
-      jumlah: nutritionRisk?.total ?? 0,
-      fill: "yellow",
-    },
-    {
-      nutrition: "fat",
-      jumlah: nutritionFat?.total ?? 0,
-      fill: "red",
-    },
-  ];
+
+  const [chartData, setChartData] = useState([]);
   useEffect(() => {
     const fetchNutritionForFamily = async () => {
-      if (familyMembers.length > 0) {
-        const { data } = await getNutritionStatusForFamily(familyMembers[0].id);
+      if (!!userLogin) {
+        const { data } = await getNutritionStatusForFamily();
         console.log({ data });
-        setNutritionFamily(data);
+        setNutritionFamily(data[0].nutrition_statuses);
+        const nutrition = data[0].nutrition_statuses;
+        const nutritionNormal = nutrition.find((stat) => stat.status_id === 3);
+        const nutritionRisk = nutrition.find((stat) => stat.status_id === 4);
+        const nutritionFat = nutrition.find((stat) => stat.status_id === 5);
+        console.log({ nutritionNormal });
+        setChartData([
+          {
+            nutrition: "normal",
+            jumlah: nutritionNormal?.total ?? 0,
+            fill: "#11ff26",
+          },
+          {
+            nutrition: "riskFat",
+            jumlah: nutritionRisk?.total ?? 0,
+            fill: "yellow",
+          },
+          {
+            nutrition: "fat",
+            jumlah: nutritionFat?.total ?? 0,
+            fill: "red",
+          },
+        ]);
       }
     };
-    // fetchNutritionForFamily();
-  }, [familyMembers]);
-  console.log({ nutritionFamily });
+    fetchNutritionForFamily();
+  }, [userLogin]);
+  console.log({ nutritionFamily, chartData });
+
   return (
     <Card className="flex flex-col relative">
       <CardHeader className="items-center pb-0 text-xl">
-        <CardTitle>Cart Nutrisi Keluarga</CardTitle>
+        <CardTitle>Grafik Nutrisi Keluarga</CardTitle>
         {/* <CardDescription>January - June 2024</CardDescription> */}
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square max-h-[200px] min-w-[300px]"
+          className="mx-auto aspect-square max-h-[200px] min-w-[300px] "
         >
           {nutritionFamily.length > 0 ? (
             <PieChart>

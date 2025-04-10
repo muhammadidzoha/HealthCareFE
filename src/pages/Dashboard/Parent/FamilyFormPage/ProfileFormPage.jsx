@@ -1,12 +1,16 @@
 import { toast } from "react-toastify";
-import { ProfileFormTemplate } from "./ProfileFormTemplate";
+import { Button } from "@/components/ui/button";
+
+import { ProfileFormTemplate } from "../ProfileFormTemplate";
 import { useNavigate } from "react-router-dom";
 import { useFamilyFormStore } from "@/store/form/familyFormStore";
-import { addMemberAfterLogin } from "@/lib/API/Parent/parentApi";
-export const AddProfilePage = ({
+import { addMemberAfterLogin, updateMember } from "@/lib/API/Parent/parentApi";
+import { userStore } from "@/store/users/userStore";
+export const ProfileFormPage = ({
   buttonType,
   children,
   formFor = "PARENT",
+  action = "create",
 }) => {
   // const [birthDate, setBirthDate] = useState(JSON.parse(localStorage.getItem('formInput'))?.birthDate || null);
   const {
@@ -16,6 +20,7 @@ export const AddProfilePage = ({
     onBirthDateChange,
   } = useFamilyFormStore();
   const navigate = useNavigate();
+  const { userLogin } = userStore();
 
   const onSubmitProfileForm = (e, type = "PARENT") => {
     e.preventDefault();
@@ -28,15 +33,24 @@ export const AddProfilePage = ({
 
   const handleSubmitParentForm = async (type = "PARENT") => {
     const savedPayload = { ...formInput, selfBirthDate: birthDate };
-    console.log({ savedPayload });
     localStorage.setItem("formInput", JSON.stringify(savedPayload));
     localStorage.setItem("selfFormPage", true);
-    const {data} = await addMemberAfterLogin(savedPayload);
-    console.log({data});
+    if (action == "create") {
+      const { data } = await addMemberAfterLogin(savedPayload);
+      console.log({ data });
+    } else {
+      if (!userLogin?.id) {
+        toast.error("member id is required");
+        return;
+      }
+      const { data } = await updateMember(userLogin.id, savedPayload);
+      console.log({ data });
+    }
+
     toast.success(`Data berhasil disimpan`, {
       autoClose: 1500,
       onClose: () => {
-        navigate("/dashboard");
+        navigate("/dashboard/parent");
       },
     });
   };
@@ -55,6 +69,7 @@ export const AddProfilePage = ({
       birthWeight={formInput.nutrition.birth_weight}
       buttonType={buttonType}
       phoneNumber={formInput.profile.phoneNumber}
+      action={action}
     >
       {children}
     </ProfileFormTemplate>

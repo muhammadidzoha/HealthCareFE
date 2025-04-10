@@ -1,14 +1,10 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import {
-  Building,
-  ChartBarStacked,
-  CircleHelp,
-  LayoutDashboard,
-  LockKeyhole,
-} from "lucide-react";
+import { userStore } from "@/store/users/userStore";
+import { LayoutDashboard } from "lucide-react";
 import { useEffect } from "react";
+import { MdOutlineFamilyRestroom } from "react-icons/md";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 export default function ParentLayout() {
@@ -26,12 +22,15 @@ export default function ParentLayout() {
     localStorage.removeItem("accessToken");
     window.location.reload();
   };
+  const { userLogin } = userStore();
 
   const data = {
     user: {
       username: JSON.parse(localStorage.getItem("user"))?.username,
       email: JSON.parse(localStorage.getItem("user"))?.email,
-      avatar: "https://docs.material-tailwind.com/img/face-2.jpg",
+      avatar:
+        `${import.meta.env.VITE_BASE_URL}public/${userLogin?.avatar}` ??
+        import.meta.env.VITE_DEFAULT_AVATAR,
       onClick: handleLogout,
     },
     teams: [
@@ -48,8 +47,48 @@ export default function ParentLayout() {
         icon: LayoutDashboard,
         isActive: location.pathname === "/dashboard/parent",
       },
+      {
+        title: "Keluarga",
+        url: "/dashboard/parent/members",
+        icon: MdOutlineFamilyRestroom,
+        isActive: location.pathname === "/dashboard/parent/members",
+      },
     ],
   };
+
+  useEffect(() => {
+    const data = {
+      user: {
+        username: JSON.parse(localStorage.getItem("user"))?.username,
+        email: JSON.parse(localStorage.getItem("user"))?.email,
+        avatar:
+          `${import.meta.env.VITE_BASE_URL}public/${userLogin?.avatar}` ??
+          import.meta.env.VITE_DEFAULT_AVATAR,
+        onClick: handleLogout,
+      },
+      teams: [
+        {
+          name: "Jalinan",
+          logo: <img src="/logo.png" alt="logo" className="w-[25px]" />,
+          subName: "Anak Sehat",
+        },
+      ],
+      navMain: [
+        {
+          title: "Dashboard",
+          url: "/dashboard/parent",
+          icon: LayoutDashboard,
+          isActive: location.pathname === "/dashboard/parent",
+        },
+        {
+          title: "Keluarga",
+          url: "/dashboard/parent/members",
+          icon: MdOutlineFamilyRestroom,
+          isActive: location.pathname === "/dashboard/parent/members",
+        },
+      ],
+    };
+  }, [userLogin]);
 
   return (
     <div className="[--header-height:calc(theme(spacing.14))]">

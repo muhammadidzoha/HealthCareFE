@@ -1,52 +1,43 @@
-import { getQuisionerById } from "@/lib/API/Parent/parentApi";
+import { getQuisionerById, reponseQuisioner } from "@/lib/API/Parent/parentApi";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { QuestionList } from "./QuestionList";
+import { quisionerStore } from "@/store/Quisioner/quisionerStore";
+import { toast } from "react-toastify";
 
 export const ResponseQuisionerPage = () => {
-  const dummy = [
-    {
-      id: 1,
-      quisioner_id: 1,
-      question: "Anak Sekolah yang sehat adalah yang memiliki badan gemuk",
-      type: "MULTIPLE_CHOICE",
-      created_at: "2025-03-15T17:49:32.740Z",
-      updated_at: "2025-03-15T17:49:32.740Z",
-      is_required: true,
-      options: [
-        {
-          id: 1,
-          question_id: 1,
-          title: "Benar",
-          score: 0,
-          created_at: "2025-03-15T17:49:32.770Z",
-        },
-        {
-          id: 2,
-          question_id: 1,
-          title: "Salah",
-          score: 1,
-          created_at: "2025-03-15T17:49:32.770Z",
-        },
-      ],
-    },
-  ];
+  const navigate = useNavigate();
   const [quisioners, setQuisioners] = useState();
+  const {userBooleanResponses} = quisionerStore();
   const { id } = useParams();
   useEffect(() => {
     const fetchQuisioner = async () => {
       const { data } = await getQuisionerById(id);
-      console.log({ data });
 
       setQuisioners(data);
     };
     fetchQuisioner();
   }, []);
+
+  const handleSubmit = async (type = "") => {
+    if(type === "MULTIPLE_CHOICE" || type === "SCALE") {
+      console.log({userBooleanResponses})
+      console.log("Submit from multiple choice and scale");
+      const { data } = await reponseQuisioner(id, userBooleanResponses);
+
+      toast.success(`${data.message ?? "Data Berhasil Disimpan"}`, {
+        onClose: () => {
+            navigate('/dashboard/parent')
+        },
+        autoClose: 1500
+    })
+    }
+  }
   console.log({ quisioners });
   return (
     <article className="p-4 relative h-full">
       {/* <QuestionList questions={quisioners?.questions ?? []} /> */}
-      <QuestionList {...quisioners} />
+      <QuestionList {...quisioners} onSubmit={handleSubmit}/>
     </article>
   );
 };

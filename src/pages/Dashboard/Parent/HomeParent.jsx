@@ -1,20 +1,28 @@
 import { NutritionDoughnoutCart } from "@/components/Cart/NutritionDoughnoutCart";
+import Modal from "@/components/Modal/Modal";
 import { DashboardProgress } from "@/components/Progress/DashboardProgress";
 import { BasicTable } from "@/components/Table/BasicTable";
+import { Button } from "@/components/ui/button";
 import {
   getFamilyMembers,
+  getMembersBelongToUser,
   getParentQuisioners,
+  getUserResponse,
 } from "@/lib/API/Parent/parentApi";
+import { formatBirthDate } from "@/lib/utils";
 import { useFamilyFormStore } from "@/store/form/familyFormStore";
 import { userStore } from "@/store/users/userStore";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 export const ParentHomePage = () => {
   const { formInput, fatherFormInput } = useFamilyFormStore();
   const { familyMembers, setFamilyMembers } = userStore();
   const [parentQuisioner, setParentQuisioner] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [userResponse, setUserResponse] = useState(null);
+  const [memberLogin, setMemberLogin] = useState(null);
+  const { userLogin } = userStore();
 
   const [progressItems, setProgressItems] = useState([
     {
@@ -22,7 +30,7 @@ export const ParentHomePage = () => {
       progress: Math.round(familyMembers.length > 2 ? 100 : 0),
       totalQuestion: 3,
       totalAnswered: 5,
-      url: "family/create",
+      url: "create",
       isFilled: false,
     },
   ]);
@@ -40,8 +48,42 @@ export const ParentHomePage = () => {
   };
 
   useEffect(() => {
+    const fetchMemberWhooseLogin = async () => {
+      const { data } = await getMembersBelongToUser();
+      setMemberLogin(data);
+    };
+    fetchMemberWhooseLogin();
+  }, []);
+
+  useEffect(() => {
     async function fetchFamilyMembersData() {
       const { data } = await getFamilyMembers();
+      useFamilyFormStore.setState((prevValue) => ({
+        ...prevValue,
+        formInput: {
+          profile: {
+            education: data[0].education.toLowerCase(),
+            fullName: data[0].full_name,
+            phoneNumber: data[0].phone_number,
+            gender: data[0].gender,
+            relation: data[0].relation,
+          },
+          nutrition: {
+            ...data[0].nutrition[0],
+          },
+          job: {
+            jobTypeId: data[0].job.job_type.id,
+            income: data[0].job.income,
+          },
+          residence: {
+            status: data[0].residence.status,
+            address: data[0].residence.address,
+            description: data[0].residence.description,
+          },
+        },
+        selfBirthDate: formatBirthDate(data[0].birth_date),
+      }));
+      console.log({ data });
       setFamilyMembers(data);
     }
 
@@ -55,11 +97,12 @@ export const ParentHomePage = () => {
             index === self.findIndex((q) => q.title === item.title)
         );
 
-        return uniqueItems.map((item) => {
+        return uniqueItems.map((item, i) => {
           let progress = 0;
           let totalQuestion = 0;
-          let url = "";
+          let url = item.url ?? "";
           let onClick = () => {};
+          let quisioner = null;
 
           if (item.title.toLowerCase().includes("data keluarga")) {
             progress = familyMembers.length > 2 ? 100 : 0;
@@ -67,23 +110,38 @@ export const ParentHomePage = () => {
           } else if (
             item.title.toLowerCase().includes("pengetahuan gizi seimbang")
           ) {
-            const quisioner = uniqueItems.find((value) =>
+            quisioner = uniqueItems.find((value) =>
               value.title.toLowerCase().includes("pengetahuan gizi seimbang")
             );
-            progress = 50;
+
             totalQuestion = quisioner.questions?.length ?? 0;
-            url = `quisioners/${quisioner.id}/response?q=1`;
+
+            url = `quisioners/${quisioner.id}/response?q=1&type=MULTIPLE_CHOICE`;
           } else if (item.title.toLowerCase().includes("sehari-hari anak")) {
-            const quisioner = uniqueItems.find((value) =>
+            quisioner = uniqueItems.find((value) =>
               value.title.toLowerCase().includes("sehari-hari anak")
             );
             progress = 50;
             totalQuestion = quisioner.questions?.length ?? 0;
+            url = `quisioners/${quisioner.id}/response?q=1&type=SCALE`;
+          }
+          if (!!memberLogin && !!quisioner) {
+            console.log({ memberLogin, quisioner });
+            const answeredQuisioner = quisioner.response.find(
+              (res) => res.family_member_id === memberLogin[0].id
+            );
+            console.log({ answeredQuisioner });
+            progress = answeredQuisioner
+              ? Math.ceil(
+                  (answeredQuisioner.answers.length / totalQuestion) * 100
+                )
+              : 0;
           }
           return {
+            ...quisioner,
             title: item.title,
-            progress: progress,
-            totalQuestion: totalQuestion,
+            progress,
+            totalQuestion,
             totalAnswered: progress === 100 ? totalQuestion : 0,
             url,
             isFilled: progress === 100,
@@ -95,53 +153,65 @@ export const ParentHomePage = () => {
       setParentQuisioner(data);
     }
 
-    fetchParentQuisioner();
+    Promise.all([fetchParentQuisioner(), fetchFamilyMembersData()]);
+  }, [memberLogin]);
 
-    fetchFamilyMembersData();
+  useEffect(() => {
+    const fecthUserLogin = async () => {
+      const { data } = await getMembersBelongToUser();
+      if (data.length > 0) {
+        userStore.setState((prevState) => ({
+          ...prevState,
+          userLogin: data[0],
+        }));
+      }
+    };
+    fecthUserLogin();
   }, []);
+
+  useEffect(() => {
+    setProgressItems((prevValue) =>
+      prevValue.map((value) => {
+        if (value.title.toLowerCase().includes("data keluarga")) {
+          return {
+            title: "Data Keluarga",
+            progress: Math.round(familyMembers.length > 2 ? 100 : 0),
+            totalQuestion: 3,
+            totalAnswered: 3,
+            url: "create",
+            isFilled: familyMembers.length > 2,
+          };
+        }
+        return value;
+      })
+    );
+  }, [familyMembers]);
+
+  const [isOpen, setIsOpen] = useState(true);
+  console.log({ userLogin });
 
   return (
     <article className="w-full p-4">
+      <Modal
+        isOpen={familyMembers?.length === 0}
+        setIsOpen={setIsOpen}
+        title="Isi Data Diri Terlebih dahulu"
+      >
+        <Button type="button" asChild>
+          <Link to="/dashboard/parent/profile/create">Isi data diri</Link>
+        </Button>
+      </Modal>
       <section>
         <div className="flex gap-5 justify-between w-full">
           <DashboardProgress progressItems={progressItems} />
           <NutritionDoughnoutCart />
-          {/* <div className="bg-white w-min rounded-xl h-min ">
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger>
-                  <Calendar
-                    mode="single"
-                    selected={date}
-                    onSelect={setDate}
-                    className="rounded-md border w-min w-full"
-                    onDayMouseEnter={handleDayHover}
-                    onMonthChange={() => {
-                      setMonthChange(true);
-                    }}
-                    // modifiers={{
-                    //     special: specialDays.map((day) => day.date),
-                    // }}
-                    // modifiersClassNames={{
-                    //     special: "bg-red-500 text-white rounded-full",
-                    // }}
-                  />
-                  {tooltipText && monthChange && (
-                    <TooltipContent className="bg-black text-white p-2 rounded-md text-sm">
-                      {tooltipText}
-                    </TooltipContent>
-                  )}
-                </TooltipTrigger>
-              </Tooltip>
-            </TooltipProvider>
-          </div> */}
         </div>
-        <BasicTable
+        {/* <BasicTable
           caption={"Informasi Keluarga"}
           data={[]}
           format={format}
           title={"Tabel Keluarga"}
-        />
+        /> */}
       </section>
     </article>
   );

@@ -1,5 +1,6 @@
 import React from "react";
 import { BooleanQuestion } from "./BooleanQuestion";
+import { ScaleQuestion } from "./ScaleQuestion";
 
 export const QuestionItem = ({ id, question, options, type, index = 1 }) => {
   return (
@@ -14,6 +15,12 @@ export const QuestionItem = ({ id, question, options, type, index = 1 }) => {
             type={type}
           />
         ))}
+        {type === "SCALE" && (
+          <ScaleQuestion id={id}
+          question={question}
+          options={options}
+          type={type} order="asc" />
+        )}
     </div>
   );
 };

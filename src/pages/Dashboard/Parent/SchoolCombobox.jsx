@@ -17,6 +17,10 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import axios from "axios";
+import {
+  getClassesWithCategories,
+  getSchools,
+} from "@/lib/API/Parent/parentApi";
 
 const frameworks = [
   {
@@ -52,21 +56,13 @@ export function SchoolCombobox({ onInputChange, school, setSchool }) {
 
   useEffect(() => {
     const getAllSchools = async () => {
-      const response = await axios.get(
-        "http://localhost:5000/institutions/schools",
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-        }
-      );
-      const { data } = response.data;
+      const { data } = await getSchools();
       setSchools(data);
     };
 
     getAllSchools();
   }, []);
-
+  console.log({ school });
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -92,6 +88,7 @@ export function SchoolCombobox({ onInputChange, school, setSchool }) {
                   value={schoolData.name}
                   onSelect={(currentValue) => {
                     onInputChange("institutionId", schoolData.id);
+                    onInputChange("schoolData", schoolData);
                     setSchool((prevValue) =>
                       prevValue.id === schoolData.id ? {} : schoolData
                     );

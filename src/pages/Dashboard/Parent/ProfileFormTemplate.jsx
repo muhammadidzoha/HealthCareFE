@@ -24,6 +24,8 @@ export const ProfileFormTemplate = ({
   isResidenceSame,
   childrenResidence,
   phoneNumber,
+  action = "create",
+  studentData,
 }) => {
   return (
     <form
@@ -51,6 +53,7 @@ export const ProfileFormTemplate = ({
               onInputChange={onInputChange}
               formFor={formFor}
               studentClass={studentClass}
+              studentData={studentData}
             />
           ) : (
             <JobForm
@@ -61,13 +64,16 @@ export const ProfileFormTemplate = ({
           )}
         </div>
         <div className="flex-1">
-          <NutritionForm
-            height={nutrition.height}
-            isChildren={formFor === "CHILDREN"}
-            onInputChange={onInputChange}
-            weight={nutrition.weight}
-            birth_weight={birthWeight}
-          />
+          {action === "create" && (
+            <NutritionForm
+              height={nutrition.height}
+              isChildren={formFor === "CHILDREN"}
+              onInputChange={onInputChange}
+              weight={nutrition.weight}
+              birth_weight={birthWeight}
+            />
+          )}
+
           {formFor === "CHILDREN" ? null : (
             <ResidenceForm
               residenceStatus={residence.status}
